@@ -7,9 +7,12 @@ var router = exports.router = function (app) {
 	app.get('/init', function (req, res, next) {
 		var user, project, handler;
 		// TODO: find the current user and return his current project.
-		user = new User(process.env.USER);
-		// XXX: don't store the user in here when we have a proper data store.
-		router.user = user;
+		if (!router.user) {
+			user = new User(process.env.USER);
+			// XXX: don't store the user in here when we have a proper data store.
+			router.user = user;
+		} else
+			user = router.user;
 		if (user.projects.length === 0) {
 			project = new Project('MyProject', user.id);
 			user.addProject(project);
@@ -19,12 +22,11 @@ var router = exports.router = function (app) {
 		var body = JSON.stringify({'user': user, 'project': project.id});
 		sendResult(res, body);
 	});
-
+	// Request to store the contents.
 	app.put('/init', function(req, res, next) {
 	    // TODO: find the current user and update the requested handler.
 	    var user = router.user;
 	    req.body = req.body || {};
-		console.log(require('sys').inspect(req));
 	    var code = req.body.code;
 	    var uri = req.body.uri;
 	    var method = req.body.method;
@@ -38,7 +40,7 @@ var router = exports.router = function (app) {
 	        sendError(res, 404);
 	        return;
 	    }
-	    user.projects[project].handlers[method + " " + uri].code = code;
+	    router.user.projects[project].handlers[method + " " + uri].code = code;
 	    sendResult(res);
 	});
 };
