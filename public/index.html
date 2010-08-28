@@ -1,0 +1,106 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>NodifyJS</title>
+    <link type="text/css" href="css/ui-lightness/jquery-ui-1.8.4.custom.css" rel="stylesheet"/>
+    <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui-1.8.4.custom.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/BespinEmbedded.css">
+    <script type="text/javascript" src="BespinEmbedded.js"></script>
+
+    <style type="text/css">
+        .bespin {
+            width: 99%;
+            height: 420px;
+
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(function() {
+
+            // Tabs
+            $('#tabs').tabs();
+
+            $("a.resource, input.store-btn").button();
+
+        });
+    </script>
+    <style type="text/css">
+        /*nodify page css*/
+        body {
+            font: 62.5% "Trebuchet MS", sans-serif;
+            margin: 50px;
+        }
+
+        input.store-btn {
+            width: 70px;
+            display: inline;
+        }
+
+        form.store-form {
+            display: inline;
+        }
+    </style>
+
+    <!-- Get the favicon -->
+    <link rel="shortcut icon" href="favicon.gif"/>
+
+    <script type="text/javascript">
+        window.onBespinLoad = function() {
+            // Resize editor window
+            var windowHeight;
+            if (typeof window.innerWidth != 'undefined') {
+                windowHeight = window.innerHeight;
+            }
+            else if (typeof document.documentElement != 'undefined'
+                    && typeof document.documentElement.clientWidth != 'undefined'
+                    && document.documentElement.clientWidth != 0) {
+                windowHeight = document.documentElement.clientHeight;
+            }
+            else {
+                windowHeight = document.getElementsByTagName('body')[0].clientHeight;
+            }
+            //$(".bespin").css("height", windowHeight - 320);
+        };
+    </script>
+
+</head>
+<body style="background-color:#1E1916">
+
+<h1 style="font-size:2.5em"><img align="absmiddle" src="nodify-logo.gif"> NodifyJS</h1>
+<hr>
+<div style="float:right">
+    <input class="store-btn" type="submit" value="Save">
+    <input class="store-btn" type="submit" value="Revert">
+    <input class="store-btn" type="submit" value="Deploy">
+</div>
+
+<!-- The buttons to access different resources -->
+
+<br><br>
+
+<div class="nodify">
+
+
+    
+        <div id="editor1" class="bespin" data-bespinoptions='{ "stealFocus": true, "syntax": "js" }' style="-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;">
+// The text of
+            this div shows up in the editor.
+            var thisCode = "what shows up in the editor";
+            function editMe() {
+            alert("and have fun!");
+            }
+        </div>
+
+
+
+
+</div>
+<!-- End nodify -->
+
+
+</body>
+</html>
