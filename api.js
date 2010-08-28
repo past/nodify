@@ -7,36 +7,41 @@ var router = exports.router = function (app) {
 	app.get('/init', function (req, res, next) {
 		var user, project, handler;
 		// TODO: find the current user and return his current project.
-		user = new User(process.env.USER);
-		// XXX: don't store the user in here when we have a proper data store.
-		router.user = user;
+		if (!router.user) {
+			user = new User(process.env.USER);
+			// XXX: don't store the user in here when we have a proper data store.
+			router.user = user;
+		} else
+			user = router.user;
 		if (user.projects.length === 0) {
-			project = new Project('MyProject', user.id);
+			project = new Project('MyProject', user.username);
 			user.addProject(project);
-			handler = new Handler('GET', '/', 'var a = 1;', user.id);
+			handler = new Handler('GET', '/', 'var a = 1;', user.username);
 			project.addHandler(handler);
-		}
-		var body = JSON.stringify({'user': user, 'project': project.id});
+		} else
+			project = user.projects.lastProject;
+		var body = JSON.stringify({'user': user, 'project': project.name});
 		sendResult(res, body);
 	});
-	
+	// Request to store the contents.
 	app.put('/init', function(req, res, next) {
 	    // TODO: find the current user and update the requested handler.
 	    var user = router.user;
-	    req.params = req.params || {};
-	    var code = req.params.code;
-	    var uri = req.params.uri;
-	    var method = req.params.method;
-	    var project = req.params.project;
+	    req.body = req.body || {};
+	    var code = req.body.code;
+	    var uri = req.body.uri;
+	    var method = req.body.method;
+	    var project = req.body.project;
 	    if (!code || !method || !uri || !project) {
-	        sendError(400);
+			console.log("ERROR: project="+project+",uri="+uri+",method="+method+",code="+code);
+	        sendError(res, 400);
 	        return;
 	    }
 	    if (!user.projects[project] || !user.projects[project].handlers[method + " " + uri]) {
-	        sendError(404);
+	        sendError(res, 404);
 	        return;
 	    }
-	    user.projects[project].handlers[method + " " + uri].code = code;
+	    router.user.projects[project].handlers[method + " " + uri].code = decodeURIComponent(code);
 	    sendResult(res);
 	});
 };
