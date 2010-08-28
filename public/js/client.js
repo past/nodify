@@ -59,7 +59,7 @@ window.onBespinLoad = function() {
 				uri: '/'
 			},
 			success: function () {
-				nodifyMsg("File saved!");
+				nodifyMsg("The contents were saved");
 			},
 			dataType: "text",
 			error: function(request, status, error) {
@@ -69,8 +69,10 @@ window.onBespinLoad = function() {
     });
 
     $('#revert-btn').click(function() {
-        nodifyMsg("File reverted!");
-
+		$.get('/api/init', function (data) {
+			editor.value = window.data.user.projects['MyProject'].handlers['GET /'].code;
+			nodifyMsg("The contents were reverted");
+		});
     });
 
     $('#deploy-btn').click(function() {
