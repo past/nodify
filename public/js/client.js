@@ -70,7 +70,8 @@ window.onBespinLoad = function() {
 
     $('#revert-btn').click(function() {
 		$.get('/api/init', function (data) {
-			editor.value = window.data.user.projects['MyProject'].handlers['GET /'].code;
+			window.data = data;
+			editor.value = data.user.projects['MyProject'].handlers['GET /'].code;
 			nodifyMsg("The contents were reverted");
 		});
     });

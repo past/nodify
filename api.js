@@ -14,12 +14,13 @@ var router = exports.router = function (app) {
 		} else
 			user = router.user;
 		if (user.projects.length === 0) {
-			project = new Project('MyProject', user.id);
+			project = new Project('MyProject', user.username);
 			user.addProject(project);
-			handler = new Handler('GET', '/', 'var a = 1;', user.id);
+			handler = new Handler('GET', '/', 'var a = 1;', user.username);
 			project.addHandler(handler);
-		}
-		var body = JSON.stringify({'user': user, 'project': project.id});
+		} else
+			project = user.projects.lastProject;
+		var body = JSON.stringify({'user': user, 'project': project.name});
 		sendResult(res, body);
 	});
 	// Request to store the contents.
@@ -40,7 +41,7 @@ var router = exports.router = function (app) {
 	        sendError(res, 404);
 	        return;
 	    }
-	    router.user.projects[project].handlers[method + " " + uri].code = code;
+	    router.user.projects[project].handlers[method + " " + uri].code = decodeURIComponent(code);
 	    sendResult(res);
 	});
 };
