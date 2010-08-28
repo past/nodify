@@ -89,17 +89,20 @@ $(document).ready(function() {
 
     $('#deploy-btn').click(function() {
         nodifyMsg("Project deployed!");
+    });
 
+    $('#lnk-dep').click(function() {
+		$.post('/api/deploy', {'project': 'MyProject'}, function (data) {
+			nodifyMsg("The project was deployed");
+		});
     });
 
     $('#lnk-new').click(function() {
         $("#dialog-project-new").dialog('open');
-
     });
 
     $('#btn-project-new-cancel').click(function() {
         $("#dialog-project-new").dialog('close');
-
     });
 
     $('#btn-project-new-submit').click(function() {
