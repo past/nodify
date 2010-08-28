@@ -19,6 +19,8 @@ $(document).ready(function() {
 				env.editor.value = data.user.projects['MyProject'].handlers['GET /'].code;
 		});
 	});
+	// Register the loading indicator on ajax events.
+	$.loading({onAjax:true, text: 'Working...', effect: 'fade', delay: 100});
 });
 
 window.onBespinLoad = function() {
