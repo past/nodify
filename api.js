@@ -45,7 +45,7 @@ var router = exports.router = function (app) {
 	// Request to store the contents.
 	app.put('/init', function(req, res, next) {
 	    // TODO: find the current user and update the requested handler.
-		var username = process.env.USER;
+		var username = process.env.USER || 'dummy';
 		users.get(username, function(err, doc, meta) {
 		    var user;
 		    if (err && err.errno == 2) {
