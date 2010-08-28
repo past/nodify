@@ -1,23 +1,46 @@
 var User = require('./domain/user').User,
 	Handler = require('./domain/handler').Handler,
-	Project = require('./domain/project').Project;
+	Project = require('./domain/project').Project,
+	nStore = require('nStore');
+	
+var users = nStore('data/users.db');
+
 // The router for the api requests.
 var router = exports.router = function (app) {
 	// Request for bootstrapping actions.
 	app.get('/init', function (req, res, next) {
-		var user, project, handler;
+		var project, handler;
 		// TODO: find the current user and return his current project.
-		user = new User(process.env.USER);
-		// XXX: don't store the user in here when we have a proper data store.
-		router.user = user;
-		if (user.projects.length === 0) {
-			project = new Project('MyProject', user.id);
-			user.addProject(project);
-			handler = new Handler('GET', '/', 'var a = 1;', user.id);
-			project.addHandler(handler);
-		}
-		var body = JSON.stringify({'user': user, 'project': project.id});
-		sendResult(res, body);
+		var username = process.env.USER;
+		users.get(username, function(err, doc, meta) {
+		    var user;
+		    if (err && err.errno == 2) {
+		        console.log(err);
+	            user = new User(username);
+		        if (user.projectsLength === 0) {
+			        project = new Project('MyProject', user.id);
+			        user.addProject(project);
+			        handler = new Handler('GET', '/', 'var a = 1;', user.id);
+			        project.addHandler(handler);
+		        }
+	            users.save(username, user, function(err) {
+	                if (err)
+	                    throw err;
+	            });
+		    }
+		    else if (err)
+		        throw err;
+		    else {
+		        console.log(doc);
+		        user = createUser(doc);
+		        console.log(user);
+		        project = user.projects['MyProject'];
+		    }
+		    console.log(project);
+		    console.log(project.id);
+    		var body = JSON.stringify({'user': user, 'project': project.id});
+    		sendResult(res, body);
+		});
 	});
 	
 	app.put('/init', function(req, res, next) {
@@ -59,3 +82,22 @@ var sendError = function (res, status, data) {
 		res.end();
 };
 
+var createUser = function(dbUser) {
+    var user = new User(dbUser.username);
+    for (var p in dbUser.projects) {
+        user.addProject(createProject(dbUser.projects[p]));
+    }
+    return user;
+};
+
+var createProject = function(dbProject) {
+    var proj = new Project(dbProject.name, dbProject.username);
+    for (var h in dbProject.handlers) {
+        proj.addHandler(createHandler(dbProject.handlers[h]));
+    }
+    return proj;
+};
+
+var createHandler = function(dbHandler) {
+    return new Handler(dbHandler.method, dbHandler.uri, dbHandler.code, dbHandler.author);
+}
