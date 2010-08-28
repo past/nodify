@@ -21,20 +21,6 @@ $(document).ready(function() {
 	});
 	// Register the loading indicator on ajax events.
 	$.loading({onAjax:true, text: 'Working...', effect: 'fade', delay: 100});
-});
-
-window.onBespinLoad = function() {
-    // Get the DOM node with the Bespin instance inside
-    var edit = document.getElementById("editor1");
-    // Get the environment variable.
-    var env = edit.bespin;
-    // Get the editor.
-    var editor = env.editor;
-    env.settings.set("tabstop", 4);
-    editor.syntax = "js";
-    editor.focus = true;
-	if (window.data)
-		editor.value = window.data.user.projects['MyProject'].handlers['GET /'].code;
 
     function nodifyMsg(msg, msgType) {
         var backgroundColor = "";
@@ -60,6 +46,13 @@ window.onBespinLoad = function() {
     }
 
     $('#save-btn').click(function() {
+		// Get the DOM node with the Bespin instance inside
+		var edit = document.getElementById("editor1");
+		// Get the environment variable.
+		var env = edit.bespin;
+		// Get the editor.
+		if (env && env.editor)
+			var editor = env.editor;
 		$.ajax({
 			url: '/api/init',
 			type: 'PUT',
@@ -82,6 +75,13 @@ window.onBespinLoad = function() {
     $('#revert-btn').click(function() {
 		$.get('/api/init', function (data) {
 			window.data = data;
+			// Get the DOM node with the Bespin instance inside
+			var edit = document.getElementById("editor1");
+			// Get the environment variable.
+			var env = edit.bespin;
+			// Get the editor.
+			if (env && env.editor)
+				var editor = env.editor;
 			editor.value = data.user.projects['MyProject'].handlers['GET /'].code;
 			nodifyMsg("The contents were reverted");
 		});
@@ -127,4 +127,18 @@ window.onBespinLoad = function() {
     $("#dialog-project-new").dialog({ autoOpen: false });
     $("btn-project-new-submit").button();
 
+});
+
+window.onBespinLoad = function() {
+    // Get the DOM node with the Bespin instance inside
+    var edit = document.getElementById("editor1");
+    // Get the environment variable.
+    var env = edit.bespin;
+    // Get the editor.
+    var editor = env.editor;
+    env.settings.set("tabstop", 4);
+    editor.syntax = "js";
+    editor.focus = true;
+	if (window.data)
+		editor.value = window.data.user.projects['MyProject'].handlers['GET /'].code;
 }
