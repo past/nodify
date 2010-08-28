@@ -81,7 +81,7 @@ var router = exports.router = function (app) {
             });
 		});
 	});
-	
+
 	app.post('/deploy', function(req, res, next) {
 		var username = process.env.USER || 'dummy';
 		users.get(username, function(err, doc, meta) {
@@ -109,7 +109,7 @@ var router = exports.router = function (app) {
 	        //TODO: Return something useful
 	        sendResult(res);
 		});
-	}
+	});
 };
 
 // Helper function to send the result.

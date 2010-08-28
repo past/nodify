@@ -64,6 +64,7 @@ $(document).ready(function() {
 			},
 			success: function () {
 				nodifyMsg("The contents were saved");
+				editor.focus = true;
 			},
 			dataType: "text",
 			error: function(request, status, error) {
@@ -84,16 +85,21 @@ $(document).ready(function() {
 				var editor = env.editor;
 			editor.value = data.user.projects['MyProject'].handlers['GET /'].code;
 			nodifyMsg("The contents were reverted");
+			editor.focus = true;
 		});
-    });
-
-    $('#deploy-btn').click(function() {
-        nodifyMsg("Project deployed!");
     });
 
     $('#lnk-dep').click(function() {
 		$.post('/api/deploy', {'project': 'MyProject'}, function (data) {
+			// Get the DOM node with the Bespin instance inside
+			var edit = document.getElementById("editor1");
+			// Get the environment variable.
+			var env = edit.bespin;
+			// Get the editor.
+			if (env && env.editor)
+				var editor = env.editor;
 			nodifyMsg("The project was deployed");
+			editor.focus = true;
 		});
     });
 
