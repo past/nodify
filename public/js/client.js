@@ -32,7 +32,7 @@ window.onBespinLoad = function() {
     editor.syntax = "js";
     editor.focus = true;
 	if (window.data)
-		env.editor.value = window.data.user.projects['MyProject'].handlers['GET /'].code;
+		editor.value = window.data.user.projects['MyProject'].handlers['GET /'].code;
 
     function nodifyMsg(msg) {
         var options = {id: 'message_from_top',
@@ -49,13 +49,31 @@ window.onBespinLoad = function() {
     }
 
     $('#save-btn').click(function() {
-        nodifyMsg("File saved!");
-
+		$.ajax({
+			url: '/api/init',
+			type: 'PUT',
+			data: {
+				method: 'GET',
+				project: 'MyProject',
+				code: encodeURIComponent(editor.value),
+				uri: '/'
+			},
+			success: function () {
+				nodifyMsg("The contents were saved");
+			},
+			dataType: "text",
+			error: function(request, status, error) {
+				nodifyMsg("Error while saving file: " + error, "error");
+			}
+		});
     });
 
     $('#revert-btn').click(function() {
-        nodifyMsg("File reverted!");
-
+		$.get('/api/init', function (data) {
+			window.data = data;
+			editor.value = data.user.projects['MyProject'].handlers['GET /'].code;
+			nodifyMsg("The contents were reverted");
+		});
     });
 
     $('#deploy-btn').click(function() {

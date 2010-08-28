@@ -42,24 +42,25 @@ var router = exports.router = function (app) {
     		sendResult(res, body);
 		});
 	});
-	
+	// Request to store the contents.
 	app.put('/init', function(req, res, next) {
 	    // TODO: find the current user and update the requested handler.
 	    var user = router.user;
-	    req.params = req.params || {};
-	    var code = req.params.code;
-	    var uri = req.params.uri;
-	    var method = req.params.method;
-	    var project = req.params.project;
+	    req.body = req.body || {};
+	    var code = req.body.code;
+	    var uri = req.body.uri;
+	    var method = req.body.method;
+	    var project = req.body.project;
 	    if (!code || !method || !uri || !project) {
-	        sendError(400);
+			console.log("ERROR: project="+project+",uri="+uri+",method="+method+",code="+code);
+	        sendError(res, 400);
 	        return;
 	    }
 	    if (!user.projects[project] || !user.projects[project].handlers[method + " " + uri]) {
-	        sendError(404);
+	        sendError(res, 404);
 	        return;
 	    }
-	    user.projects[project].handlers[method + " " + uri].code = code;
+	    router.user.projects[project].handlers[method + " " + uri].code = decodeURIComponent(code);
 	    sendResult(res);
 	});
 };

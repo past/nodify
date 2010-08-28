@@ -15,6 +15,7 @@ server.use("/",
 );
 // Serve the API responses.
 server.use("/api",
+	connect.bodyDecoder(),
 	connect.cookieDecoder(),
 	connect.router(api.router)
 );
