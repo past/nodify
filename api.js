@@ -1,7 +1,9 @@
 var User = require('./domain/user').User,
 	Handler = require('./domain/handler').Handler,
 	Project = require('./domain/project').Project,
-	nStore = require('nStore');
+	nStore = require('nStore'),
+	sys = require('sys'),
+	deployer = require('./deployer').deployer;
 
 var users = nStore('data/users.db');
 
@@ -106,8 +108,10 @@ var router = exports.router = function (app) {
 	            sendError(res, 404);
 	            return;
 	        }
-	        //TODO: Return something useful
-	        sendResult(res);
+			deployer(user.projects[project], function(stdout, stderr) {
+				//TODO: Return something useful
+				sendResult(res, stdout+'\n'+stderr);
+			});
 		});
 	});
 };

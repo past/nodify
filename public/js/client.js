@@ -98,7 +98,7 @@ $(document).ready(function() {
 			// Get the editor.
 			if (env && env.editor)
 				var editor = env.editor;
-			nodifyMsg("The project was deployed");
+			nodifyMsg("Results: " + data);
 			editor.focus = true;
 		});
     });
