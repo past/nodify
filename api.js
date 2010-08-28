@@ -5,6 +5,37 @@ var User = require('./domain/user').User,
 var router = exports.router = function (app) {
 	// Request for bootstrapping actions.
 	app.get('/init', function (req, res, next) {
+		var user, project, handler;
+		// TODO: find the current user and return his current project.
+		user = new User(process.env.USER);
+		// XXX: don't store the user in here when we have a proper data store.
+		router.user = user;
+		if (user.projects.length === 0) {
+			project = new Project('MyProject', user.id);
+			user.addProject(project);
+			handler = new Handler('GET', '/', 'var a = 1;', user.id);
+			project.addHandler(handler);
+		}
+		var body = JSON.stringify({'user': user, 'project': project.id});
+		sendResult(res, body);
 	});
+};
+
+// Helper function to send the result.
+var sendResult = function (res, data) {
+	res.writeHead(200, {'Content-Type': 'application/json'});
+	if (data)
+		res.end(data);
+	else
+		res.end();
+};
+
+// Helper function to send the result in error cases.
+var sendError = function (res, status, data) {
+	res.writeHead(status, {'Content-Type': 'text/plain'});
+	if (data)
+		res.end(data);
+	else
+		res.end();
 };
 
