@@ -90,16 +90,25 @@ $(document).ready(function() {
     });
 
     $('#lnk-dep').click(function() {
-		$.post('/api/deploy', {'project': 'MyProject'}, function (data) {
-			// Get the DOM node with the Bespin instance inside
-			var edit = document.getElementById("editor1");
-			// Get the environment variable.
-			var env = edit.bespin;
-			// Get the editor.
-			if (env && env.editor)
-				var editor = env.editor;
-			nodifyMsg("Results: " + data);
-			editor.focus = true;
+		$.ajax({
+			url: '/api/deploy',
+			type: 'POST',
+			data: {'project': 'MyProject'},
+			success: function (data) {
+				// Get the DOM node with the Bespin instance inside
+				var edit = document.getElementById("editor1");
+				// Get the environment variable.
+				var env = edit.bespin;
+				// Get the editor.
+				if (env && env.editor)
+					var editor = env.editor;
+				nodifyMsg("Output: " + data);
+				editor.focus = true;
+			},
+			error: function(request, status, error) {
+				nodifyMsg("Error: " + error, "error");
+			},
+			dataType: 'text'
 		});
     });
 
