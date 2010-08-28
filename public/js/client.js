@@ -36,12 +36,21 @@ window.onBespinLoad = function() {
 	if (window.data)
 		editor.value = window.data.user.projects['MyProject'].handlers['GET /'].code;
 
-    function nodifyMsg(msg) {
+    function nodifyMsg(msg, msgType) {
+        var backgroundColor = "";
+        if (msgType == "error") {
+            backgroundColor = "red";
+            // This will not work
+            //$("#message_from_top").css("color","black");
+        } else {
+            backgroundColor = "#4C4A41";
+            // This will not work
+            // $("#message_from_top").css("color","#E2BE38");
+        }
         var options = {id: 'message_from_top',
             position: 'top',
             size: 20,
-            backgroundColor: '#4C4A41',
-            //delay: 1500,
+            backgroundColor: backgroundColor,
             delay: 3500,
             speed: 500,
             fontSize: '12px'
@@ -82,5 +91,18 @@ window.onBespinLoad = function() {
         nodifyMsg("Project deployed!");
 
     });
+
+    $('#lnk-new').click(function() {
+        $("#dialog-project-new").dialog('open');
+
+    });
+
+    $('#btn-project-new-cancel').click(function() {
+        $("#dialog-project-new").dialog('close');
+
+    });
+
+    $("#dialog-project-new").dialog({ autoOpen: false });
+    $("btn-project-new-submit").button();
 
 }
