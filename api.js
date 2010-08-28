@@ -34,7 +34,7 @@ var router = exports.router = function (app) {
 		        console.log(doc);
 		        user = createUser(doc);
 		        console.log(user);
-		        project = user.projects['MyProject'];
+		        project = user.lastProject;
 		    }
 		    console.log(project);
 		    console.log(project.id);
