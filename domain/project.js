@@ -1,3 +1,6 @@
+/**
+ * A project is a collection of handlers
+**/
 var Project = exports.Project = function(name, author) {
     this.name = name;
     this.author = author;

@@ -1,3 +1,6 @@
+/**
+ * A user of the application. A user contains projects
+**/
 var User = exports.User = function(username) {
     this.username = username;
     this.projects = {};

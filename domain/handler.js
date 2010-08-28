@@ -1,3 +1,6 @@
+/**
+ * A handler is the code that handles a particular uri for a particula method (GET, PUT, etc)
+**/
 var Handler = exports.Handler = function(method, uri, code, author) {
     this.author = author;
     this.method = method;
