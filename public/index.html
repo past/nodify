@@ -13,8 +13,14 @@
 
     <style type="text/css">
         .bespin {
-            width: 100%;
-            height: 420px;
+            width: 98.5%;
+            height: 520px;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            border: 10px solid #ddd;
+            -moz-border-radius: 10px;
+            -webkit-border-radius: 10px;
 
         }
 
@@ -29,10 +35,9 @@
             color: white;
             font-family: arial, lucida, helvetica, sans-serif;
             font-size: 14px;
-            margin-left: 8px;
-            /*padding: 8px 12px;*/
+            margin-left: 8px; /*padding: 8px 12px;*/
             text-shadow: rgba(0, 0, 0, 0.398438);
-            
+
         }
 
         #message_from_top {
@@ -64,14 +69,18 @@
 <body style="background-color:#1E1916">
 
 <h1 style="font-size:2.8em; font-family: MuseoSans, Helvetica; color:white">Nodify</h1>
-<a href="http://nodeknockout.com/teams/del-fuegos" target="nko" title="Help me win Node.js KO!"><img style="position: fixed; top: 10px; right: 5px; border: 0px;" src="http://nodeknockout.com/images/voteko.png" alt="Help me win Node.js KO!" /></a>
-<a href="http://twitter.com/nodifyjs"><img style="position: fixed; top: 10px; right: 131px; border: 0px;" src="btn-twitter.gif"  /></a>
-<a href="http://twitter.com/nodifyjs"><img style="position: fixed; top: 10px; right: 257px; border: 0px;" src="btn-forum.gif"  /></a>
+<a href="http://nodeknockout.com/teams/del-fuegos" target="nko" title="Help me win Node.js KO!"><img
+        style="position: fixed; top: 10px; right: 5px; border: 0px;" src="http://nodeknockout.com/images/voteko.png"
+        alt="Help me win Node.js KO!"/></a>
+<a href="http://twitter.com/nodifyjs"><img style="position: fixed; top: 10px; right: 131px; border: 0px;"
+                                           src="btn-twitter.gif"/></a>
+<a href="http://twitter.com/nodifyjs"><img style="position: fixed; top: 10px; right: 257px; border: 0px;"
+                                           src="btn-forum.gif"/></a>
 <hr>
 <div style="float:right">
     <input type="submit" value="Save" class="btns" id="save-btn">
-    <input  type="submit" value="Revert" class="btns" id="revert-btn">
-    <input  type="submit" value="Deploy" class="btns" id="deploy-btn">
+    <input type="submit" value="Revert" class="btns" id="revert-btn">
+    <input type="submit" value="Deploy" class="btns" id="deploy-btn">
 </div>
 
 <!-- The buttons to access different resources -->
@@ -79,10 +88,9 @@
 <br><br><br>
 
 
-
-
-    <div id="editor1" class="bespin" data-bespinoptions='{ "stealFocus": true, "syntax": "js" }'>alert("keyboard broken!");</div>
-
+<div id="editor1" class="bespin" data-bespinoptions='{ "stealFocus": true, "syntax": "js" }'>alert("keyboard
+    broken!");
+</div>
 
 
 <!-- End nodify -->
