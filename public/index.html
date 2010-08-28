@@ -47,6 +47,10 @@
             color: #E2BE38;
 
         }
+
+        a.prj-lnk {
+            color: white;
+        }
     </style>
 
     <style type="text/css">
@@ -88,6 +92,20 @@
 <body style="background-color:#1E1916">
 
 <h1 style="font-size:2.8em; font-family: MuseoSans, Helvetica; color:white">Nodify</h1>
+
+<div style="text-align:right; color:white; font-size:14px;">
+    <label>Projects
+    <select name="projects" id="projects" style="font-size:14px;">
+      <option value="value">label</option>
+      <option value="value">label</option>
+    </select>
+  </label>
+    <div style="display:inline; border-right-width: .2em; border-right-style: solid; border-right-color: #4C4A41; padding-left:14px; padding-right:14px; padding-top:5px; margin-left:55px;"><a href="#" id="lnk-new" class="prj-lnk">New</a></div>
+    <div style="display:inline; border-right-width: .2em; border-right-style: solid; border-right-color: #4C4A41; padding-left:14px; padding-right:14px; padding-top:5px;"><a href="#" id="lnk-rn" class="prj-lnk">Rename</a></div>
+    <div style="display:inline; border-right-width: .2em; border-right-style: solid; border-right-color: #4C4A41; padding-left:14px; padding-right:14px; padding-top:5px;"><a href="#" id="lnk-del" class="prj-lnk">Delete</a></div>
+    <div style="display:inline; padding-left:14px; padding-top:5px;"><a href="#" id="lnk-dep" class="prj-lnk">Deploy</a></div>
+
+</div>
 <a href="http://nodeknockout.com/teams/del-fuegos" target="nko" title="Help me win Node.js KO!">
     <img style="position: fixed; top: 10px; right: 5px; border: 0px;" src="http://nodeknockout.com/images/voteko.png"
          alt="Help me win Node.js KO!"/>
@@ -95,7 +113,7 @@
 <a href="http://twitter.com/nodifyjs">
     <img style="position: fixed; top: 10px; right: 131px; border: 0px;" src="btn-twitter.gif"/>
 </a>
-<a href="http://twitter.com/nodifyjs">
+<a href="http://nodify.uservoice.com">
     <img style="position: fixed; top: 10px; right: 257px; border: 0px;" src="btn-forum.gif"/>
 </a>
 <hr>
@@ -115,7 +133,11 @@
 
 
 <!-- End nodify -->
-
+<div id="dialog-project-new" title="Add new project">
+	<label>Project name: <input type="text"/></label><br>
+    <input type="button" id="btn-project-new-submit" value="Save">
+    <input type="button" id="btn-project-new-cancel" value="Cancel">
+</div>
 
 </body>
 </html>
