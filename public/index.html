@@ -26,6 +26,9 @@
 
         .btns {
             -webkit-box-shadow: rgba(255, 255, 255, 0.199219) 0px 1px 0px inset, rgba(0, 0, 0, 0.199219) 0px -1px 0px inset, rgba(0, 0, 0, 0.0976562) 0px 1px 2px;
+            -moz-border-radius: 0.25em 0.25em 0.25em 0.25em;
+            -moz-box-shadow: 0 1px 0 rgba(255, 255, 255, 0.2) inset, 0 -1px 0 rgba(0, 0, 0, 0.2) inset, 0 1px 2px rgba(0, 0, 0, 0.1);
+            background: -moz-linear-gradient(center top, #3E6CB9, #383292) repeat scroll 0 0 transparent;
             background: transparent -webkit-gradient(linear, 50% 0%, 50% 100%, from(#3E6CB9), to(#383292));
             border: 1px solid #25225B;
             border-bottom-left-radius: 0.25em 0.25em;
@@ -65,17 +68,36 @@
 
     <!-- Get the favicon -->
     <link rel="shortcut icon" href="favicon.gif"/>
+    <script type="text/javascript">
+
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-18234529-1']);
+        _gaq.push(['_trackPageview']);
+
+        (function() {
+            var ga = document.createElement('script');
+            ga.type = 'text/javascript';
+            ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(ga, s);
+        })();
+
+    </script>
 </head>
 <body style="background-color:#1E1916">
 
 <h1 style="font-size:2.8em; font-family: MuseoSans, Helvetica; color:white">Nodify</h1>
-<a href="http://nodeknockout.com/teams/del-fuegos" target="nko" title="Help me win Node.js KO!"><img
-        style="position: fixed; top: 10px; right: 5px; border: 0px;" src="http://nodeknockout.com/images/voteko.png"
-        alt="Help me win Node.js KO!"/></a>
-<a href="http://twitter.com/nodifyjs"><img style="position: fixed; top: 10px; right: 131px; border: 0px;"
-                                           src="btn-twitter.gif"/></a>
-<a href="http://twitter.com/nodifyjs"><img style="position: fixed; top: 10px; right: 257px; border: 0px;"
-                                           src="btn-forum.gif"/></a>
+<a href="http://nodeknockout.com/teams/del-fuegos" target="nko" title="Help me win Node.js KO!">
+    <img style="position: fixed; top: 10px; right: 5px; border: 0px;" src="http://nodeknockout.com/images/voteko.png"
+         alt="Help me win Node.js KO!"/>
+</a>
+<a href="http://twitter.com/nodifyjs">
+    <img style="position: fixed; top: 10px; right: 131px; border: 0px;" src="btn-twitter.gif"/>
+</a>
+<a href="http://twitter.com/nodifyjs">
+    <img style="position: fixed; top: 10px; right: 257px; border: 0px;" src="btn-forum.gif"/>
+</a>
 <hr>
 <div style="float:right">
     <input type="submit" value="Save" class="btns" id="save-btn">
@@ -88,8 +110,7 @@
 <br><br><br>
 
 
-<div id="editor1" class="bespin" data-bespinoptions='{ "stealFocus": true, "syntax": "js" }'>alert("keyboard
-    broken!");
+<div id="editor1" class="bespin" data-bespinoptions='{ "stealFocus": true, "syntax": "js" }'>alert("yo");
 </div>
 
 
