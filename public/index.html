@@ -2,32 +2,45 @@
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-    <title>NodifyJS</title>
+    <title>Nodify</title>
     <link type="text/css" href="css/ui-lightness/jquery-ui-1.8.4.custom.css" rel="stylesheet"/>
     <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.8.4.custom.min.js"></script>
-
+    <script type="text/javascript" src="js/client.js"></script>
     <link rel="stylesheet" type="text/css" href="css/BespinEmbedded.css">
     <script type="text/javascript" src="BespinEmbedded.js"></script>
+    <script src="js/jquery.slidingmessage.min.js"></script>
 
     <style type="text/css">
         .bespin {
-            width: 99%;
+            width: 100%;
             height: 420px;
+
+        }
+
+        .btns {
+            -webkit-box-shadow: rgba(255, 255, 255, 0.199219) 0px 1px 0px inset, rgba(0, 0, 0, 0.199219) 0px -1px 0px inset, rgba(0, 0, 0, 0.0976562) 0px 1px 2px;
+            background: transparent -webkit-gradient(linear, 50% 0%, 50% 100%, from(#3E6CB9), to(#383292));
+            border: 1px solid #25225B;
+            border-bottom-left-radius: 0.25em 0.25em;
+            border-bottom-right-radius: 0.25em 0.25em;
+            border-top-left-radius: 0.25em 0.25em;
+            border-top-right-radius: 0.25em 0.25em;
+            color: white;
+            font-family: arial, lucida, helvetica, sans-serif;
+            font-size: 14px;
+            margin-left: 8px;
+            /*padding: 8px 12px;*/
+            text-shadow: rgba(0, 0, 0, 0.398438);
+            
+        }
+
+        #message_from_top {
+            color: #E2BE38;
 
         }
     </style>
 
-    <script type="text/javascript">
-        $(function() {
-
-            // Tabs
-            $('#tabs').tabs();
-
-            $("a.resource, input.store-btn").button();
-
-        });
-    </script>
     <style type="text/css">
         /*nodify page css*/
         body {
@@ -47,58 +60,35 @@
 
     <!-- Get the favicon -->
     <link rel="shortcut icon" href="favicon.gif"/>
-
-    <script type="text/javascript">
-        window.onBespinLoad = function() {
-            // Resize editor window
-            var windowHeight;
-            if (typeof window.innerWidth != 'undefined') {
-                windowHeight = window.innerHeight;
-            }
-            else if (typeof document.documentElement != 'undefined'
-                    && typeof document.documentElement.clientWidth != 'undefined'
-                    && document.documentElement.clientWidth != 0) {
-                windowHeight = document.documentElement.clientHeight;
-            }
-            else {
-                windowHeight = document.getElementsByTagName('body')[0].clientHeight;
-            }
-            //$(".bespin").css("height", windowHeight - 320);
-        };
-    </script>
-
 </head>
 <body style="background-color:#1E1916">
 
-<h1 style="font-size:2.5em"><img align="absmiddle" src="nodify-logo.gif"> NodifyJS</h1>
+<h1 style="font-size:2.8em; font-family: MuseoSans, Helvetica; color:white">Nodify</h1>
 <hr>
 <div style="float:right">
-    <input class="store-btn" type="submit" value="Save">
-    <input class="store-btn" type="submit" value="Revert">
-    <input class="store-btn" type="submit" value="Deploy">
+    <input type="submit" value="Save" class="btns" id="save-btn">
+    <input  type="submit" value="Revert" class="btns" id="revert-btn">
+    <input  type="submit" value="Deploy" class="btns" id="deploy-btn">
 </div>
 
 <!-- The buttons to access different resources -->
 
-<br><br>
-
-<div class="nodify">
-
-
-    
-        <div id="editor1" class="bespin" data-bespinoptions='{ "stealFocus": true, "syntax": "js" }' style="-webkit-border-radius: 10px;-moz-border-radius: 10px;border-radius: 10px;">
-// The text of
-            this div shows up in the editor.
-            var thisCode = "what shows up in the editor";
-            function editMe() {
-            alert("and have fun!");
-            }
-        </div>
+<br><br><br>
 
 
 
 
-</div>
+    <div id="editor1" class="bespin" data-bespinoptions='{ "stealFocus": true, "syntax": "js" }'>
+        // The text of
+        this div shows up in the editor.
+        var thisCode = "what shows up in the editor";
+        function editMe() {
+        alert("and have fun!");
+        }
+    </div>
+
+
+
 <!-- End nodify -->
 
 
