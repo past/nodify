@@ -52,8 +52,10 @@ var router = exports.router = function (app) {
 		        sendError(res, 404);
 		        return;
 		    }
-		    else if (err)
-		        throw err;
+		    else if (err) {
+                sendError(res, 500);
+                throw err;
+		    }
 	        user = createUser(doc);
 	        req.body = req.body || {};
 	        var code = req.body.code;
@@ -79,6 +81,35 @@ var router = exports.router = function (app) {
             });
 		});
 	});
+	
+	app.post('/deploy', function(req, res, next) {
+		var username = process.env.USER || 'dummy';
+		users.get(username, function(err, doc, meta) {
+		    var user;
+		    if (err && err.errno == 2) {
+		        sendError(res, 404);
+		        return;
+		    }
+		    else if (err) {
+		        sendError(res, 500);
+		        throw err;
+		    }
+	        user = createUser(doc);
+	        req.body = req.body || {};
+	        var project = req.body.project;
+	        if (!project) {
+			    console.log("ERROR: project=" + project);
+	            sendError(res, 400);
+	            return;
+	        }
+	        if (!user.projects[project] || !user.projects[project].handlers["GET /"]) {
+	            sendError(res, 404);
+	            return;
+	        }
+	        //TODO: Return something useful
+	        sendResult(res);
+		});
+	}
 };
 
 // Helper function to send the result.
