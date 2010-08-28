@@ -45,23 +45,39 @@ var router = exports.router = function (app) {
 	// Request to store the contents.
 	app.put('/init', function(req, res, next) {
 	    // TODO: find the current user and update the requested handler.
-	    var user = router.user;
-	    req.body = req.body || {};
-	    var code = req.body.code;
-	    var uri = req.body.uri;
-	    var method = req.body.method;
-	    var project = req.body.project;
-	    if (!code || !method || !uri || !project) {
-			console.log("ERROR: project="+project+",uri="+uri+",method="+method+",code="+code);
-	        sendError(res, 400);
-	        return;
-	    }
-	    if (!user.projects[project] || !user.projects[project].handlers[method + " " + uri]) {
-	        sendError(res, 404);
-	        return;
-	    }
-	    router.user.projects[project].handlers[method + " " + uri].code = decodeURIComponent(code);
-	    sendResult(res);
+		var username = process.env.USER;
+		users.get(username, function(err, doc, meta) {
+		    var user;
+		    if (err && err.errno == 2) {
+		        sendError(res, 404);
+		        return;
+		    }
+		    else if (err)
+		        throw err;
+	        user = createUser(doc);
+	        req.body = req.body || {};
+	        var code = req.body.code;
+	        var uri = req.body.uri;
+	        var method = req.body.method;
+	        var project = req.body.project;
+	        if (!code || !method || !uri || !project) {
+			    console.log("ERROR: project=" + project + ",uri=" + uri + ",method=" + method + ",code=" + code);
+	            sendError(res, 400);
+	            return;
+	        }
+	        if (!user.projects[project] || !user.projects[project].handlers[method + " " + uri]) {
+	            sendError(res, 404);
+	            return;
+	        }
+	        user.projects[project].handlers[method + " " + uri].code = decodeURIComponent(code);
+	        users.save(user.username, user, function(err) {
+	            if (err) {
+	                sendError(res, 500);
+	                throw err;
+	            }
+	            sendResult(res);
+            });
+		});
 	});
 };
 
