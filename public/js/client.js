@@ -102,6 +102,28 @@ window.onBespinLoad = function() {
 
     });
 
+    $('#btn-project-new-submit').click(function() {
+
+        var newProjectName = $("btn-project-new-name").val();
+
+        $.ajax({
+			url: '/api/init',
+			type: 'PUT',
+			data: {
+				project: encodeURIComponent(newProjectName)
+			},
+			success: function () {
+                $("#dialog-project-new").dialog('close');
+				nodifyMsg("The new project was saved");
+			},
+			dataType: "text",
+			error: function(request, status, error) {
+                $("#dialog-project-new").dialog('close');
+				nodifyMsg("Error while saving file: " + error, "error");
+			}
+		});
+    });
+
     $("#dialog-project-new").dialog({ autoOpen: false });
     $("btn-project-new-submit").button();
 
