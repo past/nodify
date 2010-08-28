@@ -2,7 +2,7 @@ var User = require('./domain/user').User,
 	Handler = require('./domain/handler').Handler,
 	Project = require('./domain/project').Project,
 	nStore = require('nStore');
-	
+
 var users = nStore('data/users.db');
 
 // The router for the api requests.
@@ -11,7 +11,7 @@ var router = exports.router = function (app) {
 	app.get('/init', function (req, res, next) {
 		var project, handler;
 		// TODO: find the current user and return his current project.
-		var username = process.env.USER;
+		var username = process.env.USER || 'dummy';
 		users.get(username, function(err, doc, meta) {
 		    var user;
 		    if (err && err.errno == 2) {
