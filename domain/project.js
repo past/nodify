@@ -8,18 +8,18 @@ var Project = exports.Project = function(name, author) {
     this.handlers.length = 0;
 };
 
-Project.prototype.addHandler(handler) {
+Project.prototype.addHandler = function(handler) {
     this.handlers[handler.id] = handler;
     this.handlers.length++;
     this.handlers.lastHandler = handler;
 };
 
-Project.prototype.removeHandler(handler) {
+Project.prototype.removeHandler = function(handler) {
     delete this.handlers[handler.id];
     this.handlers.length--;
 };
 
-Project.prototype.toString() {
+Project.prototype.toString = function() {
     return this.name;
 };
 
