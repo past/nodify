@@ -4,12 +4,14 @@ $(document).ready(function() {
 		var projects, project, handlers, handler, h, p, edit, env;
 		window.data = data;
 		projects = data.user.projects;
-		// TODO: iterate over the projects and fill the combo box.
 		for (p in projects) {
 			if (projects.hasOwnProperty(p) && p !== 'length') {
 				project = projects[p];
 				log('project=' + project.name);
-				$('#projects').append('<option value="value">' + project.name + '</option>');
+				if (data.user.lastProject && project.name === data.user.lastProject.name)
+					$('#projects').append('<option value="value" selected>' + project.name + '</option>');
+				else
+					$('#projects').append('<option value="value">' + project.name + '</option>');
 			}
 		}
 		handlers = projects['MyProject'].handlers;
