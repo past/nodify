@@ -23,9 +23,9 @@ $(document).ready(function() {
 	// Register the loading indicator on ajax events.
 	$.loading({onAjax:true, text: 'Working...', effect: 'fade', delay: 100});
 
-    function nodifyMsg(msg, msgType) {
+    function nodifyMsg(msg, type) {
         var backgroundColor = "";
-        if (msgType == "error") {
+        if (type === "error") {
             backgroundColor = "red";
             // This will not work
             //$("#message_from_top").css("color","black");
@@ -40,11 +40,30 @@ $(document).ready(function() {
             backgroundColor: backgroundColor,
             delay: 3500,
             speed: 500,
-            fontSize: '12px'
+            fontSize: '16px'
         };
 
         $.showMessage(msg, options)
     }
+
+	function consoleAppend (msg, type) {
+		if (type === 'error') {
+			msg = 'Error:\n------\n' + msg;
+		} else {
+			msg = 'Output:\n-------\n' + msg;
+		}
+		var c = $("#console");
+		var contents = c.val();
+		c.val(contents + '\n' + msg);
+		c.css("display", "block");
+		// Get the DOM node with the Bespin instance inside
+		var edit = document.getElementById("editor1");
+		// Get the environment variable.
+		var env = edit.bespin;
+		// Get the editor.
+		if (env && env.editor)
+			env.editor.dimensionsChanged();
+	}
 
     $('#save-btn').click(function() {
 		// Get the DOM node with the Bespin instance inside
@@ -103,11 +122,11 @@ $(document).ready(function() {
 				// Get the editor.
 				if (env && env.editor)
 					var editor = env.editor;
-				nodifyMsg("Output: " + data);
+				consoleAppend(data);
 				editor.focus = true;
 			},
 			error: function(request, status, error) {
-				nodifyMsg("Error: " + error, "error");
+				consoleAppend(error, "error");
 			},
 			dataType: 'text'
 		});
