@@ -42,7 +42,12 @@ var start = exports.start = function (project, createCallback, exitCallback) {
 var stop = exports.stop = function (pid) {
 	if (pid) {
         console.log("Killing process " + pid);
-		process.kill(pid, 'SIGKILL');
+        try {
+		    process.kill(pid, 'SIGKILL');
+		}
+		catch(err) {
+		    console.log(err);
+		}
 	}
 }
 
