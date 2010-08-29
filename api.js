@@ -130,6 +130,7 @@ var router = exports.router = function (app) {
 	                return;
 	            }
 	            user.projects[project].handlers[method + " " + uri].code = decodeURIComponent(code);
+	            user.projects[project].lastHandler = user.projects[project].handlers[method + " " + uri];
 	            user.lastProject = user.projects[project];
 	            users.save(user.username, user, function(err) {
 	                if (err) {
