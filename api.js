@@ -12,7 +12,6 @@ var router = exports.router = function (app) {
 	// Request for bootstrapping actions.
 	app.get('/init', function (req, res, next) {
 		var project, handler;
-	    console.log(sys.inspect(req));
 
 		var authToken = req.cookies['_auth_nodify'];
 		if (!authToken) {
@@ -110,7 +109,15 @@ var router = exports.router = function (app) {
 	                sendError(res, 404);
 	                return;
 	            }
-			    deployer.start(user.projects[project], function(stdout, stderr) {
+			    deployer.start(user.projects[project], function (pid) {
+            		console.log("Spawned proccess " + pid);
+			        user.projects[project].pid = pid;
+			        users.save(user.id, user, function (err) {
+	                    if (err) {
+	                        throw err;
+	                    }
+			    });
+			    }, function(stdout, stderr) {
 				    sendResult(res, stdout+'\n'+stderr);
 			    });
 		    });
@@ -144,7 +151,8 @@ var router = exports.router = function (app) {
 	                sendError(res, 404);
 	                return;
 	            }
-			    deployer.stop(user.projects[project]);
+	            if (user.projects[project].pid)
+			        deployer.stop(user.projects[project].pid);
 				sendResult(res);
 		    });
 		}
@@ -157,7 +165,6 @@ var sendResult = function (res, data, extraHeaders) {
     if (extraHeaders)
         for (var h in extraHeaders)
             headers[h] = extraHeaders[h];
-    console.log(sys.inspect(headers))
 	res.writeHead(200, headers);
 	if (data)
 		res.end(data);
@@ -188,7 +195,8 @@ var createUser = function(dbUser) {
 };
 
 var createProject = function(dbProject) {
-    var proj = new Project(dbProject.name, dbProject.username);
+    var proj = new Project(dbProject.name, dbProject.author);
+    proj.pid = dbProject.pid;
     for (var h in dbProject.handlers) {
         proj.addHandler(createHandler(dbProject.handlers[h]));
     }
