@@ -76,6 +76,8 @@ $(document).ready(function() {
 		var contents = c.val();
 		c.val(contents + '\n' + msg);
 		c.css("display", "block");
+		var cl = $("#console-label");
+		cl.css("display", "block");
 		// Get the DOM node with the Bespin instance inside
 		var edit = document.getElementById("editor1");
 		// Get the environment variable.
@@ -84,6 +86,19 @@ $(document).ready(function() {
 		if (env && env.editor)
 			env.editor.dimensionsChanged();
 	}
+
+	$('#projects').change(function() {
+		var project = window.data.user.projects[$(this).val()];
+		// Get the DOM node with the Bespin instance inside
+		var edit = document.getElementById("editor1");
+		// Get the environment variable.
+		var env = edit.bespin;
+		// Get the editor.
+		if (env && env.editor) {
+			var editor = env.editor;
+			editor.value = project.lastHandler.code;
+		}
+	});
 
     $('#save-btn').click(function() {
 		// Get the DOM node with the Bespin instance inside
@@ -220,34 +235,38 @@ $(document).ready(function() {
         $("#dialog-project-new").dialog('open');
     });
 
-    $('#btn-project-new-cancel').click(function() {
-        $("#dialog-project-new").dialog('close');
-    });
-
-    $('#btn-project-new-submit').click(function() {
-        var newProjectName = $("#btn-project-new-name").val();
-        $.ajax({
-			url: '/api/init',
-			type: 'POST',
-			data: {
-				create: encodeURIComponent(newProjectName)
+    $("#dialog-project-new").dialog({
+		autoOpen: false,
+		resizable: false,
+		height: 140,
+		modal: true,
+		buttons: {
+			'Save': function() {
+				$(this).dialog('close');
+				var newProjectName = $("#btn-project-new-name").val();
+				$.ajax({
+					url: '/api/init',
+					type: 'POST',
+					data: {
+						create: encodeURIComponent(newProjectName)
+					},
+					success: function () {
+						$("#dialog-project-new").dialog('close');
+						getUserData();
+						nodifyMsg("Project " + newProjectName + " was created");
+					},
+					dataType: "text",
+					error: function(request, status, error) {
+						$("#dialog-project-new").dialog('close');
+						nodifyMsg("Error while creating project: " + error, "error");
+					}
+				});
 			},
-			success: function () {
-                $("#dialog-project-new").dialog('close');
-				getUserData();
-				nodifyMsg("Project " + newProjectName + " was created");
-			},
-			dataType: "text",
-			error: function(request, status, error) {
-                $("#dialog-project-new").dialog('close');
-				nodifyMsg("Error while creating project: " + error, "error");
+			'Cancel': function() {
+				$(this).dialog('close');
 			}
-		});
-    });
-
-    $("#dialog-project-new").dialog({ autoOpen: false });
-    $("btn-project-new-submit").button();
-
+		}
+	});
 });
 
 window.onBespinLoad = function() {

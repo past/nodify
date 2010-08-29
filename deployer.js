@@ -21,7 +21,7 @@ var start = exports.start = function (project, createCallback, exitCallback) {
 		});
 		node.on('exit', function (code) {
 		    clearTimeout(timeoutId);
-		    aggrOut += 'Exit code: ' + code;
+		    aggrOut += '\nExit code: ' + code;
 		    fs.unlink(tempFile, function (err) {
 		        if (err)
 					console.log("Unable to delete " + tempFile + ".");

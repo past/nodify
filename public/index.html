@@ -162,6 +162,14 @@
             -moz-border-radius: 10px;
             -webkit-border-radius: 10px;
         }
+
+        #console-label {
+            display: none;
+            margin: 0;
+            margin-top: 10px;
+            font-size: 18px;
+            color: white;
+        }
     </style>
 
 
@@ -221,13 +229,12 @@
 <div id="editor1" class="bespin" data-bespinoptions='{ "stealFocus": true, "syntax": "js" }'>
 </div>
 
+<div id="console-label">Console</div>
 <textarea id="console" readonly="true"></textarea>
 
 <!-- End nodify -->
 <div id="dialog-project-new" title="Add new project">
-	<label>Project name: <input type="text" id="btn-project-new-name"></label><br>
-    <input type="button" id="btn-project-new-submit" value="Save">
-    <input type="button" id="btn-project-new-cancel" value="Cancel">
+  <p><label>Name</label>&nbsp;<input type="text" id="btn-project-new-name"></p>
 </div>
 
 <div id="dialog-project-delete" title="Delete the project?">
