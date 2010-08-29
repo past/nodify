@@ -220,34 +220,38 @@ $(document).ready(function() {
         $("#dialog-project-new").dialog('open');
     });
 
-    $('#btn-project-new-cancel').click(function() {
-        $("#dialog-project-new").dialog('close');
-    });
-
-    $('#btn-project-new-submit').click(function() {
-        var newProjectName = $("#btn-project-new-name").val();
-        $.ajax({
-			url: '/api/init',
-			type: 'POST',
-			data: {
-				create: encodeURIComponent(newProjectName)
+    $("#dialog-project-new").dialog({
+		autoOpen: false,
+		resizable: false,
+		height: 140,
+		modal: true,
+		buttons: {
+			'Save': function() {
+				$(this).dialog('close');
+				var newProjectName = $("#btn-project-new-name").val();
+				$.ajax({
+					url: '/api/init',
+					type: 'POST',
+					data: {
+						create: encodeURIComponent(newProjectName)
+					},
+					success: function () {
+						$("#dialog-project-new").dialog('close');
+						getUserData();
+						nodifyMsg("Project " + newProjectName + " was created");
+					},
+					dataType: "text",
+					error: function(request, status, error) {
+						$("#dialog-project-new").dialog('close');
+						nodifyMsg("Error while creating project: " + error, "error");
+					}
+				});
 			},
-			success: function () {
-                $("#dialog-project-new").dialog('close');
-				getUserData();
-				nodifyMsg("Project " + newProjectName + " was created");
-			},
-			dataType: "text",
-			error: function(request, status, error) {
-                $("#dialog-project-new").dialog('close');
-				nodifyMsg("Error while creating project: " + error, "error");
+			'Cancel': function() {
+				$(this).dialog('close');
 			}
-		});
-    });
-
-    $("#dialog-project-new").dialog({ autoOpen: false });
-    $("btn-project-new-submit").button();
-
+		}
+	});
 });
 
 window.onBespinLoad = function() {
