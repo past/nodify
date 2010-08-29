@@ -312,7 +312,7 @@ $(document).ready(function() {
 	$("#blurb").dialog({
 		autoOpen: false,
 		resizable: false,
-		height: 420,
+		height: 440,
 		width: 440,
 		modal: true,
 	});
