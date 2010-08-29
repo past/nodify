@@ -1,36 +1,47 @@
 $(document).ready(function() {
-	// Fetch the user data.
-	$.get('/api/init', function (data) {
-		var projects, project, handlers, handler, h, p, edit, env;
-		window.data = data;
-		projects = data.user.projects;
-		for (p in projects) {
-			if (projects.hasOwnProperty(p) && p !== 'length') {
-				project = projects[p];
-				log('project=' + project.name);
-				if (data.user.lastProject && project.name === data.user.lastProject.name)
-					$('#projects').append('<option value="value" selected>' + project.name + '</option>');
-				else
-					$('#projects').append('<option value="value">' + project.name + '</option>');
-			}
-		}
-		handlers = projects['MyProject'].handlers;
-		for (h in handlers) {
-			if (handlers.hasOwnProperty(h) && h !== 'length') {
-				handler = handlers[h];
-				log('method=' + handler.method + ',uri=' + handler.uri);
-				// Get the DOM node with the Bespin instance inside
-				edit = document.getElementById("editor1");
-				// Get the environment variable.
-				env = edit.bespin;
-				// Get the editor.
-				if (env && env.editor)
-					env.editor.value = data.user.projects['MyProject'].handlers['GET /'].code;
-			}
-		};
-	});
 	// Register the loading indicator on ajax events.
 	$.loading({onAjax:true, text: 'Working...', effect: 'fade', delay: 100});
+	// Fetch the user data.
+	function getUserData() {
+		$.get('/api/init', function (data) {
+			var projects, project, handlers, handler, h, p, edit, env;
+			window.data = data;
+			$('#projects').empty();
+			projects = data.user.projects;
+			for (p in projects) {
+				if (projects.hasOwnProperty(p) && p !== 'length') {
+					project = projects[p];
+					log('project=' + project.name);
+					if (data.user.lastProject && project.name === data.user.lastProject.name)
+						$('#projects').append('<option value="' + project.name + '" selected>' + project.name + '</option>');
+					else
+						$('#projects').append('<option value="' + project.name + '">' + project.name + '</option>');
+				}
+			}
+			if (!data.user.lastProject && project)
+				data.user.lastProject = project;
+			try {
+				handlers = data.user.lastProject.handlers;
+			} catch (e) {
+				handlers = {};
+			}
+			for (h in handlers) {
+				if (handlers.hasOwnProperty(h) && h !== 'length') {
+					handler = handlers[h];
+					log('method=' + handler.method + ',uri=' + handler.uri);
+					// Get the DOM node with the Bespin instance inside
+					edit = document.getElementById("editor1");
+					// Get the environment variable.
+					env = edit.bespin;
+					// Get the editor.
+					if (env && env.editor)
+						env.editor.value = data.user.lastProject.handlers['GET /'].code;
+				}
+			};
+		});
+	}
+	// Retrieve the user data.
+	getUserData();
 
     function nodifyMsg(msg, type) {
         var backgroundColor = "";
@@ -87,7 +98,7 @@ $(document).ready(function() {
 			type: 'PUT',
 			data: {
 				method: 'GET',
-				project: 'MyProject',
+				project: $('#projects').val(),
 				code: encodeURIComponent(editor.value),
 				uri: '/'
 			},
@@ -112,7 +123,7 @@ $(document).ready(function() {
 			// Get the editor.
 			if (env && env.editor)
 				var editor = env.editor;
-			editor.value = data.user.projects['MyProject'].handlers['GET /'].code;
+			editor.value = data.user.projects[$('#projects').val()].handlers['GET /'].code;
 			nodifyMsg("The contents were reverted");
 			editor.focus = true;
 		});
@@ -122,7 +133,7 @@ $(document).ready(function() {
 		$.ajax({
 			url: '/api/deploy',
 			type: 'POST',
-			data: {'project': 'MyProject'},
+			data: {'project': $('#projects').val()},
 			success: function (data) {
 				// Get the DOM node with the Bespin instance inside
 				var edit = document.getElementById("editor1");
@@ -145,7 +156,7 @@ $(document).ready(function() {
 		$.ajax({
 			url: '/api/terminate',
 			type: 'POST',
-			data: {'project': 'MyProject'},
+			data: {'project': $('#projects').val()},
 			success: function (data) {
 				// Get the DOM node with the Bespin instance inside
 				var edit = document.getElementById("editor1");
@@ -173,23 +184,22 @@ $(document).ready(function() {
     });
 
     $('#btn-project-new-submit').click(function() {
-
-        var newProjectName = $("btn-project-new-name").val();
-
+        var newProjectName = $("#btn-project-new-name").val();
         $.ajax({
 			url: '/api/init',
-			type: 'PUT',
+			type: 'POST',
 			data: {
-				project: encodeURIComponent(newProjectName)
+				create: encodeURIComponent(newProjectName)
 			},
 			success: function () {
                 $("#dialog-project-new").dialog('close');
-				nodifyMsg("The new project was saved");
+				getUserData();
+				nodifyMsg("Project " + newProjectName + " was created");
 			},
 			dataType: "text",
 			error: function(request, status, error) {
                 $("#dialog-project-new").dialog('close');
-				nodifyMsg("Error while saving file: " + error, "error");
+				nodifyMsg("Error while creating project: " + error, "error");
 			}
 		});
     });
@@ -210,5 +220,5 @@ window.onBespinLoad = function() {
     editor.syntax = "js";
     editor.focus = true;
 	if (window.data)
-		editor.value = window.data.user.projects['MyProject'].handlers['GET /'].code;
+		editor.value = window.data.user.lastProject.handlers['GET /'].code;
 }
