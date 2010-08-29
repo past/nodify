@@ -34,7 +34,7 @@ var start = exports.start = function (project, createCallback, exitCallback) {
 		        child.kill('SIGKILL');
 		    }
 		};
-		var timeoutId = setTimeout(timeoutCallback, 60000, node)
+		var timeoutId = setTimeout(timeoutCallback, 300000, node)
 		return node.pid;
 	});
 }
