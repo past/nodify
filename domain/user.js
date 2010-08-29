@@ -18,7 +18,7 @@ User.prototype.removeProject = function(project) {
     this.projectsLength--;
 	self = this;
 	Object.keys(this.projects).forEach(function (p) {
-		self.lastProject = p;
+		self.lastProject = self.projects[p];
 	});
 };
 

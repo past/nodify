@@ -19,7 +19,7 @@ Project.prototype.removeHandler = function(handler) {
     this.handlersLength--;
 	self = this;
 	Object.keys(this.handlers).forEach(function (h) {
-		self.lastHandler = h;
+		self.lastHandler = self.handlers[h];
 	});
 };
 

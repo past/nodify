@@ -205,16 +205,8 @@ $(document).ready(function() {
 					type: 'DELETE',
 					data: {'project': $('#projects').val()},
 					success: function (data) {
-						// Get the DOM node with the Bespin instance inside
-						var edit = document.getElementById("editor1");
-						// Get the environment variable.
-						var env = edit.bespin;
-						// Get the editor.
-						if (env && env.editor)
-							var editor = env.editor;
 						nodifyMsg("The project was deleted");
 						getUserData();
-						editor.focus = true;
 					},
 					error: function(request, status, error) {
 						nodifyMsg(error, "error");
