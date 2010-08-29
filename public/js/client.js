@@ -119,6 +119,7 @@ $(document).ready(function() {
 			},
 			success: function () {
 				nodifyMsg("The contents were saved");
+				getUserData();
 				editor.focus = true;
 			},
 			dataType: "text",
