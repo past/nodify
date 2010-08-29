@@ -1,19 +1,26 @@
 $(document).ready(function() {
 	// Fetch the user data.
 	$.get('/api/init', function (data) {
-		var projects, handlers, handler, h;
+		var projects, project, handlers, handler, h, p, edit, env;
 		window.data = data;
 		projects = data.user.projects;
 		// TODO: iterate over the projects and fill the combo box.
+		for (p in projects) {
+			if (projects.hasOwnProperty(p) && p !== 'length') {
+				project = projects[p];
+				log('project=' + project.name);
+				$('#projects').append('<option value="value">' + project.name + '</option>');
+			}
+		}
 		handlers = projects['MyProject'].handlers;
 		for (h in handlers) {
 			if (handlers.hasOwnProperty(h) && h !== 'length') {
 				handler = handlers[h];
-				console.log('method=' + handler.method + ',uri=' + handler.uri);
+				log('method=' + handler.method + ',uri=' + handler.uri);
 				// Get the DOM node with the Bespin instance inside
-				var edit = document.getElementById("editor1");
+				edit = document.getElementById("editor1");
 				// Get the environment variable.
-				var env = edit.bespin;
+				env = edit.bespin;
 				// Get the editor.
 				if (env && env.editor)
 					env.editor.value = data.user.projects['MyProject'].handlers['GET /'].code;
