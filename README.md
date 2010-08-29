@@ -14,3 +14,11 @@ You don't need to create an account to use Nodify, a unique user account is
 created and stored in a cookie in your browser. Currently, if you browse the
 service from a different browser you will create a new user account.
 
+Installing locally
+------------------
+
+Besides being available in [nodifyjs.com](http://nodifyjs.com/), nodify can be
+installed locally using npm. Until it appears in the npm registry, you can clone
+the repository with git and do "npm link" inside the root directory. The command
+"nodify" can then be used to launch the IDE.
+
