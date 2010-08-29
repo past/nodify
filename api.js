@@ -130,11 +130,13 @@ var router = exports.router = function (app) {
 	                return;
 	            }
 	            user.projects[project].handlers[method + " " + uri].code = decodeURIComponent(code);
+	            user.lastProject = user.projects[project];
 	            users.save(user.username, user, function(err) {
 	                if (err) {
 	                    sendError(res, 500);
 	                    throw err;
 	                }
+	                console.log(sys.inspect(user.lastProject));
 	                sendResult(res);
                 });
 		    });
@@ -284,19 +286,23 @@ var sendError = function (res, status, data, extraHeaders) {
 };
 
 var createUser = function(dbUser) {
+    var lastP = dbUser.lastProject;
     var user = new User(dbUser.username);
     for (var p in dbUser.projects) {
         user.addProject(createProject(dbUser.projects[p]));
     }
+    user.lastProject = lastP;
     return user;
 };
 
 var createProject = function(dbProject) {
+    var lastH = dbProject.lastHandler;
     var proj = new Project(dbProject.name, dbProject.author);
     proj.pid = dbProject.pid;
     for (var h in dbProject.handlers) {
         proj.addHandler(createHandler(dbProject.handlers[h]));
     }
+    proj.lastHandler = lastH;
     return proj;
 };
 
