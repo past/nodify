@@ -12,113 +12,121 @@ var router = exports.router = function (app) {
 	// Request for bootstrapping actions.
 	app.get('/init', function (req, res, next) {
 		var project, handler;
-		// TODO: find the current user and return his current project.
-		var username = process.env.USER || 'dummy';
-		users.get(username, function(err, doc, meta) {
-		    var user;
-		    if (err && err.errno == 2) {
-		        console.log(err);
-	            user = new User(username);
-		        if (user.projectsLength === 0) {
-			        project = new Project('MyProject', user.id);
-			        user.addProject(project);
-			        handler = new Handler('GET', '/', 'var a = 1;\nconsole.log(a);', user.id);
-			        project.addHandler(handler);
+	    console.log(sys.inspect(req));
+	    
+		var authToken = req.cookies['_auth_nodify'];
+		if (!authToken) {
+		    console.log("No token, Creating new user...");
+		    createNewUser(res);
+		}
+		else {
+		    console.log("Token found, loading user...");
+		    users.get(authToken, function(err, doc, meta) {
+		        var user;
+		        if (err && err.errno == 2) {
+		            console.log("User not found, Creating new user...");
+		            createNewUser(res);
 		        }
-	            users.save(username, user, function(err) {
-	                if (err)
-	                    throw err;
-	            });
-		    }
-		    else if (err)
-		        throw err;
-		    else {
-		        console.log(doc);
-		        user = createUser(doc);
-		        console.log(user);
-		        project = user.lastProject;
-		    }
-		    console.log(project);
-		    console.log(project.id);
-    		var body = JSON.stringify({'user': user, 'project': project.id});
-    		sendResult(res, body);
-		});
+		        else if (err) {
+		            sendError(res, 500);
+		            throw err;
+		        }
+		        else {
+		            user = createUser(doc);
+		            var project = user.lastProject;
+            		var body = JSON.stringify({'user': user, 'project': project.id});
+            		sendResult(res, body);
+		        }
+		    });
+		}    
 	});
 	// Request to store the contents.
 	app.put('/init', function(req, res, next) {
-	    // TODO: find the current user and update the requested handler.
-		var username = process.env.USER || 'dummy';
-		users.get(username, function(err, doc, meta) {
-		    var user;
-		    if (err && err.errno == 2) {
-		        sendError(res, 404);
-		        return;
-		    }
-		    else if (err) {
-                sendError(res, 500);
-                throw err;
-		    }
-	        user = createUser(doc);
-	        req.body = req.body || {};
-	        var code = req.body.code;
-	        var uri = req.body.uri;
-	        var method = req.body.method;
-	        var project = req.body.project;
-	        if (!code || !method || !uri || !project) {
-			    console.log("ERROR: project=" + project + ",uri=" + uri + ",method=" + method + ",code=" + code);
-	            sendError(res, 400);
-	            return;
-	        }
-	        if (!user.projects[project] || !user.projects[project].handlers[method + " " + uri]) {
-	            sendError(res, 404);
-	            return;
-	        }
-	        user.projects[project].handlers[method + " " + uri].code = decodeURIComponent(code);
-	        users.save(user.username, user, function(err) {
-	            if (err) {
-	                sendError(res, 500);
-	                throw err;
+		var authToken = req.cookies['_auth_nodify'];
+		if (!authToken)
+		    sendError(res, 403);
+		else {
+		    users.get(authToken, function(err, doc, meta) {
+		        var user;
+		        if (err && err.errno == 2) {
+		            sendError(res, 404);
+		            return;
+		        }
+		        else if (err) {
+                    sendError(res, 500);
+                    throw err;
+		        }
+	            user = createUser(doc);
+	            req.body = req.body || {};
+	            var code = req.body.code;
+	            var uri = req.body.uri;
+	            var method = req.body.method;
+	            var project = req.body.project;
+	            if (!code || !method || !uri || !project) {
+			        console.log("ERROR: project=" + project + ",uri=" + uri + ",method=" + method + ",code=" + code);
+	                sendError(res, 400);
+	                return;
 	            }
-	            sendResult(res);
-            });
-		});
+	            if (!user.projects[project] || !user.projects[project].handlers[method + " " + uri]) {
+	                sendError(res, 404);
+	                return;
+	            }
+	            user.projects[project].handlers[method + " " + uri].code = decodeURIComponent(code);
+	            users.save(user.username, user, function(err) {
+	                if (err) {
+	                    sendError(res, 500);
+	                    throw err;
+	                }
+	                sendResult(res);
+                });
+		    });
+	    }
 	});
 
 	app.post('/deploy', function(req, res, next) {
-		var username = process.env.USER || 'dummy';
-		users.get(username, function(err, doc, meta) {
-		    var user;
-		    if (err && err.errno == 2) {
-		        sendError(res, 404);
-		        return;
-		    }
-		    else if (err) {
-		        sendError(res, 500);
-		        throw err;
-		    }
-	        user = createUser(doc);
-	        req.body = req.body || {};
-	        var project = req.body.project;
-	        if (!project) {
-			    console.log("ERROR: project=" + project);
-	            sendError(res, 400);
-	            return;
-	        }
-	        if (!user.projects[project] || !user.projects[project].handlers["GET /"]) {
-	            sendError(res, 404);
-	            return;
-	        }
-			deployer(user.projects[project], function(stdout, stderr) {
-				//TODO: Return something useful
-				sendResult(res, stdout+'\n'+stderr);
-			});
-		});
+		var authToken = req.cookies['_auth_nodify'];
+		if (!authToken)
+		    sendError(res, 403);
+		else {
+		    users.get(authToken, function(err, doc, meta) {
+		        var user;
+		        if (err && err.errno == 2) {
+		            sendError(res, 404);
+		            return;
+		        }
+		        else if (err) {
+		            sendError(res, 500);
+		            throw err;
+		        }
+	            user = createUser(doc);
+	            req.body = req.body || {};
+	            var project = req.body.project;
+	            if (!project) {
+			        console.log("ERROR: project=" + project);
+	                sendError(res, 400);
+	                return;
+	            }
+	            if (!user.projects[project] || !user.projects[project].handlers["GET /"]) {
+	                sendError(res, 404);
+	                return;
+	            }
+			    deployer(user.projects[project], function(stdout, stderr) {
+				    //TODO: Return something useful
+				    sendResult(res, stdout+'\n'+stderr);
+			    });
+		    });
+		}
 	});
 };
 
 // Helper function to send the result.
-var sendResult = function (res, data) {
-	res.writeHead(200, {'Content-Type': 'application/json'});
+var sendResult = function (res, data, extraHeaders) {
+    var headers = {'Content-Type': 'application/json'};
+    if (extraHeaders)
+        for (var h in extraHeaders)
+            headers[h] = extraHeaders[h];
+    console.log(sys.inspect(headers))
+	res.writeHead(200, headers);
 	if (data)
 		res.end(data);
 	else
@@ -126,8 +134,13 @@ var sendResult = function (res, data) {
 };
 
 // Helper function to send the result in error cases.
-var sendError = function (res, status, data) {
-	res.writeHead(status, {'Content-Type': 'text/plain'});
+var sendError = function (res, status, data, extraHeaders) {
+    var headers = {'Content-Type': 'text/plain'};
+    if (extraHeaders)
+        for (var h in extraHeaders)
+            headers[h] = extraHeaders[h];
+    console.log(sys.inspect(headers))
+	res.writeHead(status, headers);
 	if (data)
 		res.end(data);
 	else
@@ -152,4 +165,42 @@ var createProject = function(dbProject) {
 
 var createHandler = function(dbHandler) {
     return new Handler(dbHandler.method, dbHandler.uri, dbHandler.code, dbHandler.author);
+}
+
+var generateAuthToken = function (callback) {
+    var authToken = new Date().getTime();
+    tokenExists(authToken, callback)
+}
+
+var tokenExists = function (token, callback) {
+    users.get(token, function (err, doc, meta) {
+        if (err && err.errno == 2)
+            callback(token);
+        else if (err)
+            throw err;
+        else
+            generateAuthToken(callback);
+    });
+}
+
+var createNewUser = function (res) {
+    generateAuthToken(function (token) {
+        var authToken = token;
+        var user = new User(authToken);
+        if (user.projectsLength === 0) {
+	        var project = new Project('MyProject', user.id);
+	        user.addProject(project);
+	        var handler = new Handler('GET', '/', 'var a = 1;\nconsole.log(a);', user.id);
+	        project.addHandler(handler);
+	        var headers = {'Set-Cookie':'_auth_nodify=' + authToken};
+        }
+        users.save(authToken, user, function(err) {
+            if (err) {
+                sendError(res, 500);
+                throw err;
+            }
+    		var body = JSON.stringify({'user': user, 'project': project.id});
+    		sendResult(res, body, headers);
+        });
+    });
 }
