@@ -34,8 +34,10 @@ $(document).ready(function() {
 					// Get the environment variable.
 					env = edit.bespin;
 					// Get the editor.
-					if (env && env.editor)
+					if (env && env.editor) {
 						env.editor.value = data.user.lastProject.handlers['GET /'].code;
+						env.editor.focus = true;
+					}
 				}
 			};
 		});
@@ -98,6 +100,7 @@ $(document).ready(function() {
 		if (env && env.editor) {
 			var editor = env.editor;
 			editor.value = project.lastHandler.code;
+			editor.focus = true;
 		}
 	});
 
@@ -251,8 +254,8 @@ $(document).ready(function() {
 					},
 					success: function () {
 						$("#dialog-project-new").dialog('close');
-						getUserData();
 						nodifyMsg("Project " + newProjectName + " was created");
+						getUserData();
 					},
 					dataType: "text",
 					error: function(request, status, error) {
@@ -285,8 +288,8 @@ $(document).ready(function() {
 					},
 					success: function () {
 						$("#dialog-project-rename").dialog('close');
-						getUserData();
 						nodifyMsg("Project was renamed to " + newProjectName);
+						getUserData();
 					},
 					dataType: "text",
 					error: function(request, status, error) {
