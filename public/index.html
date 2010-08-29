@@ -188,10 +188,7 @@
 
 <div style="text-align:right; color:white; font-size:14px;">
     <label>Project
-    <select name="projects" id="projects" style="font-size:14px;">
-      <option value="value">label</option>
-      <option value="value">label</option>
-    </select>
+    <select name="projects" id="projects" style="font-size:14px;"></select>
   </label>
     <div style="display:inline; border-right-width: .2em; border-right-style: solid; border-right-color: #4C4A41; padding-left:14px; padding-right:14px; padding-top:5px; margin-left:55px;"><a href="#" id="lnk-new" class="prj-lnk">New</a></div>
     <div style="display:inline; border-right-width: .2em; border-right-style: solid; border-right-color: #4C4A41; padding-left:14px; padding-right:14px; padding-top:5px;"><a href="#" id="lnk-rn" class="prj-lnk">Rename</a></div>
@@ -228,9 +225,13 @@
 
 <!-- End nodify -->
 <div id="dialog-project-new" title="Add new project">
-	<label>Project name: <input type="text"/ id="btn-project-new-name"></label><br>
+	<label>Project name: <input type="text" id="btn-project-new-name"></label><br>
     <input type="button" id="btn-project-new-submit" value="Save">
     <input type="button" id="btn-project-new-cancel" value="Cancel">
+</div>
+
+<div id="dialog-project-delete" title="Delete the project?">
+	<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>Do you want to <strong>permanently</strong> delete this project?</p>
 </div>
 
     <!-- Javascript at the bottom for fast page loading -->

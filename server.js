@@ -3,7 +3,7 @@ var connect = require('connect'),
 	port = parseInt(process.env.PORT) || 8080;
 
 var server = connect.createServer(
-	connect.logger({ format: ':method :url' }),
+	connect.logger(),
 	connect.errorHandler({ dumpExceptions: true, showStack: true })
 );
 // Serve static resources.

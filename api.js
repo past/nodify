@@ -39,7 +39,55 @@ var router = exports.router = function (app) {
 		    });
 		}
 	});
-	// Request to store the contents.
+	// Create new project.
+	app.post('/init', function(req, res, next) {
+		var authToken = req.cookies['_auth_nodify'];
+		if (!authToken)
+		    sendError(res, 403);
+		else {
+		    users.get(authToken, function(err, doc, meta) {
+		        var user, rename, create, project, p;
+		        if (err && err.errno == 2) {
+		            sendError(res, 404);
+		            return;
+		        }
+		        else if (err) {
+                    sendError(res, 500);
+                    throw err;
+		        }
+	            user = createUser(doc);
+	            req.body = req.body || {};
+	            rename = decodeURIComponent(req.body.rename);
+	            create = decodeURIComponent(req.body.create);
+	            project = decodeURIComponent(req.body.project);
+	            if (!create || !(project && rename)) {
+			        console.log("ERROR: project=" + project + ",create=" + create + ",rename=" + rename);
+	                sendError(res, 400);
+	                return;
+	            }
+	            if (rename && !user.projects[project]) {
+	                sendError(res, 404);
+	                return;
+	            }
+				console.log(sys.inspect(create));
+				if (create) {
+					p = new Project(create, user.username);
+					p.addHandler(new Handler('GET', '/', '', user.username));
+					user.addProject(p);
+				} else {
+					// TODO: implement rename
+				}
+	            users.save(user.username, user, function(err) {
+	                if (err) {
+	                    sendError(res, 500);
+	                    throw err;
+	                }
+	                sendResult(res);
+                });
+		    });
+		}
+	});
+	// Request to update the project contents.
 	app.put('/init', function(req, res, next) {
 		var authToken = req.cookies['_auth_nodify'];
 		if (!authToken)
@@ -71,6 +119,45 @@ var router = exports.router = function (app) {
 	                return;
 	            }
 	            user.projects[project].handlers[method + " " + uri].code = decodeURIComponent(code);
+	            users.save(user.username, user, function(err) {
+	                if (err) {
+	                    sendError(res, 500);
+	                    throw err;
+	                }
+	                sendResult(res);
+                });
+		    });
+	    }
+	});
+	// Request to delete the project.
+	app.del('/init', function(req, res, next) {
+		var authToken = req.cookies['_auth_nodify'];
+		if (!authToken)
+		    sendError(res, 403);
+		else {
+		    users.get(authToken, function(err, doc, meta) {
+		        var user;
+		        if (err && err.errno == 2) {
+		            sendError(res, 404);
+		            return;
+		        }
+		        else if (err) {
+                    sendError(res, 500);
+                    throw err;
+		        }
+	            user = createUser(doc);
+	            req.body = req.body || {};
+	            var project = req.body.project;
+	            if (!project) {
+			        console.log("ERROR: project=" + project);
+	                sendError(res, 400);
+	                return;
+	            }
+	            if (!user.projects[project]) {
+	                sendError(res, 404);
+	                return;
+	            }
+	            user.removeProject(user.projects[project]);
 	            users.save(user.username, user, function(err) {
 	                if (err) {
 	                    sendError(res, 500);
@@ -178,7 +265,6 @@ var sendError = function (res, status, data, extraHeaders) {
     if (extraHeaders)
         for (var h in extraHeaders)
             headers[h] = extraHeaders[h];
-    console.log(sys.inspect(headers))
 	res.writeHead(status, headers);
 	if (data)
 		res.end(data);

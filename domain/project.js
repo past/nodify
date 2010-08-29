@@ -17,6 +17,10 @@ Project.prototype.addHandler = function(handler) {
 Project.prototype.removeHandler = function(handler) {
     delete this.handlers[handler.id];
     this.handlersLength--;
+	self = this;
+	Object.keys(this.handlers).forEach(function (h) {
+		self.lastHandler = h;
+	});
 };
 
 Project.prototype.toString = function() {
