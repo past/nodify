@@ -11,9 +11,8 @@ var users = nStore('data/users.db');
 var router = exports.router = function (app) {
 	// Request for bootstrapping actions.
 	app.get('/init', function (req, res, next) {
-		var project, handler;
-
-		var authToken = req.cookies['_auth_nodify'];
+		var project, body, authToken, handler, user;
+		authToken = req.cookies['_auth_nodify'];
 		if (!authToken) {
 		    console.log("No token, Creating new user...");
 		    createNewUser(res);
@@ -21,7 +20,6 @@ var router = exports.router = function (app) {
 		else {
 		    console.log("Token found, loading user...");
 		    users.get(authToken, function(err, doc, meta) {
-		        var user;
 		        if (err && err.errno == 2) {
 		            console.log("User not found, Creating new user...");
 		            createNewUser(res);
@@ -32,9 +30,23 @@ var router = exports.router = function (app) {
 		        }
 		        else {
 		            user = createUser(doc);
-		            var project = user.lastProject;
-            		var body = JSON.stringify({'user': user, 'project': project.id});
-            		sendResult(res, body);
+					if (user.lastProject) {
+			            project = user.lastProject;
+						body = JSON.stringify({'user': user, 'project': project.id});
+						sendResult(res, body);
+					} else {
+						project = new Project('MyProject', user.username);
+						project.addHandler(new Handler('GET', '/', 'var a=1;\nconsole.log(a);', user.username));
+						user.addProject(project);
+						users.save(user.username, user, function(err) {
+							if (err) {
+								sendError(res, 500);
+								throw err;
+							}
+							body = JSON.stringify({'user': user, 'project': project.id});
+							sendResult(res, body);
+						});
+					}
 		        }
 		    });
 		}
