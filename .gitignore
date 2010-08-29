@@ -1,5 +1,4 @@
 .DS_Store
 *.swp
 public/.idea
-data/users.db
 tmp/*.js

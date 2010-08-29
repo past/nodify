@@ -5,7 +5,7 @@ var User = require('./domain/user').User,
 	sys = require('sys'),
 	deployer = require('./deployer');
 
-var users = nStore('data/users.db');
+var users = nStore(process.env.HOME + '/.nodify.users.db');
 
 // The router for the api requests.
 var router = exports.router = function (app) {
