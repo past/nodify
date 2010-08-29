@@ -69,10 +69,10 @@ var router = exports.router = function (app) {
 		        }
 	            user = createUser(doc);
 	            req.body = req.body || {};
-	            rename = decodeURIComponent(req.body.rename);
-	            create = decodeURIComponent(req.body.create);
-	            project = decodeURIComponent(req.body.project);
-	            if (!create || !(project && rename)) {
+	            rename = req.body.rename;
+	            create = req.body.create;
+	            project = req.body.project;
+	            if (!create && !(project && rename)) {
 			        console.log("ERROR: project=" + project + ",create=" + create + ",rename=" + rename);
 	                sendError(res, 400);
 	                return;
@@ -81,9 +81,8 @@ var router = exports.router = function (app) {
 	                sendError(res, 404);
 	                return;
 	            }
-				console.log(sys.inspect(create));
 				if (create) {
-					p = new Project(create, user.username);
+					p = new Project(decodeURIComponent(create), user.username);
 					p.addHandler(new Handler('GET', '/', '', user.username));
 					user.addProject(p);
 				} else {
