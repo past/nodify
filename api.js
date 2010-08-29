@@ -87,6 +87,7 @@ var router = exports.router = function (app) {
 					user.addProject(p);
 				} else {
 					user.projects[project].name = decodeURIComponent(rename);
+					user.lastProject = user.projects[project];
 				}
 	            users.save(user.username, user, function(err) {
 	                if (err) {
