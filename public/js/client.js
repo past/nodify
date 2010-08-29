@@ -76,6 +76,8 @@ $(document).ready(function() {
 		var contents = c.val();
 		c.val(contents + '\n' + msg);
 		c.css("display", "block");
+		var cl = $("#console-label");
+		cl.css("display", "block");
 		// Get the DOM node with the Bespin instance inside
 		var edit = document.getElementById("editor1");
 		// Get the environment variable.
