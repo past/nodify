@@ -22,7 +22,7 @@ var router = exports.router = function (app) {
 		        if (user.projectsLength === 0) {
 			        project = new Project('MyProject', user.id);
 			        user.addProject(project);
-			        handler = new Handler('GET', '/', 'var a = 1;', user.id);
+			        handler = new Handler('GET', '/', 'var a = 1;\nconsole.log(a);', user.id);
 			        project.addHandler(handler);
 		        }
 	            users.save(username, user, function(err) {
