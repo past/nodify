@@ -6,7 +6,15 @@ var deployer = exports.deployer = function (project, callback) {
 	var tempFile = __dirname + '/tmp/' + Math.random() + '.js';
 	fs.writeFile(tempFile, project.lastHandler.code, function(err) {
 		if (err) throw err;
-		node = exec('node ' + tempFile, function (error, stdout, stderr) {
+		var options = {
+		    encoding: 'utf-8',
+            timeout: 60000,
+            maxBuffer: 200*1024,
+            killSignal: 'SIGKILL',
+            cwd: null,
+            env: null
+		};
+		var node = exec('node ' + tempFile, options, function (error, stdout, stderr) {
 			if (error !== null) {
 				console.log('exec error: ' + error);
 			}
