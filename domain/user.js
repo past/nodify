@@ -16,6 +16,10 @@ User.prototype.addProject = function(project) {
 User.prototype.removeProject = function(project) {
     delete this.projects[project.id];
     this.projectsLength--;
+	self = this;
+	Object.keys(this.projects).forEach(function (p) {
+		self.lastProject = p;
+	});
 };
 
 User.prototype.toString = function() {

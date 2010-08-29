@@ -9,7 +9,7 @@ $(document).ready(function() {
 			$('#projects').empty();
 			projects = data.user.projects;
 			for (p in projects) {
-				if (projects.hasOwnProperty(p) && p !== 'length') {
+				if (projects.hasOwnProperty(p)) {
 					project = projects[p];
 					log('project=' + project.name);
 					if (data.user.lastProject && project.name === data.user.lastProject.name)
@@ -26,7 +26,7 @@ $(document).ready(function() {
 				handlers = {};
 			}
 			for (h in handlers) {
-				if (handlers.hasOwnProperty(h) && h !== 'length') {
+				if (handlers.hasOwnProperty(h)) {
 					handler = handlers[h];
 					log('method=' + handler.method + ',uri=' + handler.uri);
 					// Get the DOM node with the Bespin instance inside
@@ -173,6 +173,47 @@ $(document).ready(function() {
 			},
 			dataType: 'text'
 		});
+    });
+
+	$('#dialog-project-delete').dialog({
+		resizable: false,
+		height: 140,
+		modal: true,
+		autoOpen: false,
+		buttons: {
+			'Delete project': function() {
+				$(this).dialog('close');
+				$.ajax({
+					url: '/api/init',
+					type: 'DELETE',
+					data: {'project': $('#projects').val()},
+					success: function (data) {
+						// Get the DOM node with the Bespin instance inside
+						var edit = document.getElementById("editor1");
+						// Get the environment variable.
+						var env = edit.bespin;
+						// Get the editor.
+						if (env && env.editor)
+							var editor = env.editor;
+						nodifyMsg("The project was deleted");
+						getUserData();
+						editor.focus = true;
+					},
+					error: function(request, status, error) {
+						nodifyMsg(error, "error");
+					},
+					dataType: 'text'
+				});
+			},
+			'Cancel': function() {
+				$(this).dialog('close');
+			}
+		}
+	});
+
+    $('#lnk-del').click(function() {
+        $('#dialog-project-delete').dialog('open');
+		return false;	// prevent default action
     });
 
     $('#lnk-new').click(function() {

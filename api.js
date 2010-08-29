@@ -129,6 +129,45 @@ var router = exports.router = function (app) {
 		    });
 	    }
 	});
+	// Request to delete the project.
+	app.del('/init', function(req, res, next) {
+		var authToken = req.cookies['_auth_nodify'];
+		if (!authToken)
+		    sendError(res, 403);
+		else {
+		    users.get(authToken, function(err, doc, meta) {
+		        var user;
+		        if (err && err.errno == 2) {
+		            sendError(res, 404);
+		            return;
+		        }
+		        else if (err) {
+                    sendError(res, 500);
+                    throw err;
+		        }
+	            user = createUser(doc);
+	            req.body = req.body || {};
+	            var project = req.body.project;
+	            if (!project) {
+			        console.log("ERROR: project=" + project);
+	                sendError(res, 400);
+	                return;
+	            }
+	            if (!user.projects[project]) {
+	                sendError(res, 404);
+	                return;
+	            }
+	            user.removeProject(user.projects[project]);
+	            users.save(user.username, user, function(err) {
+	                if (err) {
+	                    sendError(res, 500);
+	                    throw err;
+	                }
+	                sendResult(res);
+                });
+		    });
+	    }
+	});
 
 	app.post('/deploy', function(req, res, next) {
 		var authToken = req.cookies['_auth_nodify'];
