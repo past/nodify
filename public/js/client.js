@@ -226,6 +226,10 @@ $(document).ready(function() {
 		}
 	});
 
+    $('#lnk-rn').click(function() {
+        $('#dialog-project-rename').dialog('open');
+		return false;	// prevent default action
+    });
     $('#lnk-del').click(function() {
         $('#dialog-project-delete').dialog('open');
 		return false;	// prevent default action
@@ -233,6 +237,7 @@ $(document).ready(function() {
 
     $('#lnk-new').click(function() {
         $("#dialog-project-new").dialog('open');
+		return false;	// prevent default action
     });
 
     $("#dialog-project-new").dialog({
@@ -259,6 +264,40 @@ $(document).ready(function() {
 					error: function(request, status, error) {
 						$("#dialog-project-new").dialog('close');
 						nodifyMsg("Error while creating project: " + error, "error");
+					}
+				});
+			},
+			'Cancel': function() {
+				$(this).dialog('close');
+			}
+		}
+	});
+
+    $("#dialog-project-rename").dialog({
+		autoOpen: false,
+		resizable: false,
+		height: 140,
+		modal: true,
+		buttons: {
+			'Rename': function() {
+				$(this).dialog('close');
+				var newProjectName = $("#btn-project-rn-name").val();
+				$.ajax({
+					url: '/api/init',
+					type: 'POST',
+					data: {
+						project: $('#projects').val(),
+						rename: encodeURIComponent(newProjectName)
+					},
+					success: function () {
+						$("#dialog-project-rename").dialog('close');
+						getUserData();
+						nodifyMsg("Project was renamed to " + newProjectName);
+					},
+					dataType: "text",
+					error: function(request, status, error) {
+						$("#dialog-project-rename").dialog('close');
+						nodifyMsg("Error while renaming project: " + error, "error");
 					}
 				});
 			},
