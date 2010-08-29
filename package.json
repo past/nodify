@@ -1,0 +1,19 @@
+{
+    "name": "nodify",
+    "version": "0.1.0",
+    "description": "A web-based IDE for NodeJS applications",
+    "homepage": "http://nodifyjs.com",
+    "author": "Panagiotis Astithas <pastith@gmail.com>",
+    "contributors": [
+        { "name": "Panagiotis Astithas", "email": "pastith@gmail.com" },
+        { "name": "Christos Stathis", "email": "chstath@gmail.com" },
+        { "name": "Dionysios Synodinos", "email": "synodinos@gmail.com" }
+    ],
+    "keywords": ["ide", "programming", "editor"],
+    "engines" : { "node": ">= 0.2.0" },
+    "bin" : { "nodify" : "./bin/nodify" },
+    "dependencies": {
+        "connect": ">= 0.2.4",
+        "nStore": ">= 0.2.1"
+    }
+}
