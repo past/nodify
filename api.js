@@ -86,7 +86,7 @@ var router = exports.router = function (app) {
 					p.addHandler(new Handler('GET', '/', '', user.username));
 					user.addProject(p);
 				} else {
-					// TODO: implement rename
+					user.projects[project].name = decodeURIComponent(rename);
 				}
 	            users.save(user.username, user, function(err) {
 	                if (err) {
@@ -311,12 +311,15 @@ var generateAuthToken = function (callback) {
 
 var tokenExists = function (token, callback) {
     users.get(token, function (err, doc, meta) {
-        if (err && err.errno == 2)
+        if (err && err.errno == 2) {
             callback(token);
+        }
         else if (err)
             throw err;
-        else
+        else {
+            console.log('!!!! Unbelievably token ' + token + ' already exists. Try another one !!!!');
             generateAuthToken(callback);
+        }
     });
 }
 
