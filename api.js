@@ -3,7 +3,7 @@ var User = require('./domain/user').User,
 	Project = require('./domain/project').Project,
 	nStore = require('nStore'),
 	sys = require('sys'),
-	deployer = require('./deployer').deployer;
+	deployer = require('./deployer');
 
 var users = nStore('data/users.db');
 
@@ -13,7 +13,7 @@ var router = exports.router = function (app) {
 	app.get('/init', function (req, res, next) {
 		var project, handler;
 	    console.log(sys.inspect(req));
-	    
+
 		var authToken = req.cookies['_auth_nodify'];
 		if (!authToken) {
 		    console.log("No token, Creating new user...");
@@ -38,7 +38,7 @@ var router = exports.router = function (app) {
             		sendResult(res, body);
 		        }
 		    });
-		}    
+		}
 	});
 	// Request to store the contents.
 	app.put('/init', function(req, res, next) {
@@ -110,10 +110,42 @@ var router = exports.router = function (app) {
 	                sendError(res, 404);
 	                return;
 	            }
-			    deployer(user.projects[project], function(stdout, stderr) {
-				    //TODO: Return something useful
+			    deployer.start(user.projects[project], function(stdout, stderr) {
 				    sendResult(res, stdout+'\n'+stderr);
 			    });
+		    });
+		}
+	});
+
+	app.post('/terminate', function(req, res, next) {
+		var authToken = req.cookies['_auth_nodify'];
+		if (!authToken)
+		    sendError(res, 403);
+		else {
+		    users.get(authToken, function(err, doc, meta) {
+		        var user;
+		        if (err && err.errno == 2) {
+		            sendError(res, 404);
+		            return;
+		        }
+		        else if (err) {
+		            sendError(res, 500);
+		            throw err;
+		        }
+	            user = createUser(doc);
+	            req.body = req.body || {};
+	            var project = req.body.project;
+	            if (!project) {
+			        console.log("ERROR: project=" + project);
+	                sendError(res, 400);
+	                return;
+	            }
+	            if (!user.projects[project] || !user.projects[project].handlers["GET /"]) {
+	                sendError(res, 404);
+	                return;
+	            }
+			    deployer.stop(user.projects[project]);
+				sendResult(res);
 		    });
 		}
 	});

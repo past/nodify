@@ -1,8 +1,8 @@
 var fs = require('fs'),
 	sys = require('sys'),
-    exec = require('child_process').exec;
+    child_process = require('child_process');
 
-var deployer = exports.deployer = function (project, callback) {
+var start = exports.start = function (project, callback) {
 	var tempFile = __dirname + '/tmp/' + Math.random() + '.js';
 	fs.writeFile(tempFile, project.lastHandler.code, function(err) {
 		if (err) throw err;
@@ -14,7 +14,7 @@ var deployer = exports.deployer = function (project, callback) {
             cwd: null,
             env: null
 		};
-		var node = exec('node ' + tempFile, options, function (error, stdout, stderr) {
+		node = child_process.exec('node ' + tempFile, options, function (error, stdout, stderr) {
 			if (error !== null) {
 				console.log('exec error: ' + error);
 			}
@@ -25,6 +25,10 @@ var deployer = exports.deployer = function (project, callback) {
 			});
 		});
 	});
+}
 
+var stop = exports.stop = function (project) {
+	if (node.pid)
+		node.kill('SIGKILL');
 }
 
