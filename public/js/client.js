@@ -109,7 +109,7 @@ $(document).ready(function() {
 		});
     });
 
-    $('#lnk-dep').click(function() {
+    $('#lnk-start').click(function() {
 		$.ajax({
 			url: '/api/deploy',
 			type: 'POST',
@@ -123,6 +123,29 @@ $(document).ready(function() {
 				if (env && env.editor)
 					var editor = env.editor;
 				consoleAppend(data);
+				editor.focus = true;
+			},
+			error: function(request, status, error) {
+				consoleAppend(error, "error");
+			},
+			dataType: 'text'
+		});
+    });
+
+    $('#lnk-stop').click(function() {
+		$.ajax({
+			url: '/api/terminate',
+			type: 'POST',
+			data: {'project': 'MyProject'},
+			success: function (data) {
+				// Get the DOM node with the Bespin instance inside
+				var edit = document.getElementById("editor1");
+				// Get the environment variable.
+				var env = edit.bespin;
+				// Get the editor.
+				if (env && env.editor)
+					var editor = env.editor;
+				nodifyMsg("The program was terminated");
 				editor.focus = true;
 			},
 			error: function(request, status, error) {
