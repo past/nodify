@@ -307,6 +307,19 @@ $(document).ready(function() {
 			}
 		}
 	});
+
+	$("#blurb").dialog({
+		autoOpen: false,
+		resizable: false,
+		height: 340,
+		width: 440,
+		modal: true,
+	});
+
+	$("#more").click(function() {
+        $("#blurb").dialog('open');
+		return false;	// prevent default action
+	});
 });
 
 window.onBespinLoad = function() {
