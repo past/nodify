@@ -190,7 +190,7 @@ var createNewUser = function (res) {
         if (user.projectsLength === 0) {
 	        var project = new Project('MyProject', user.id);
 	        user.addProject(project);
-	        var handler = new Handler('GET', '/', 'var a = 1;', user.id);
+	        var handler = new Handler('GET', '/', 'var a = 1;\nconsole.log(a);', user.id);
 	        project.addHandler(handler);
 	        var headers = {'Set-Cookie':'_auth_nodify=' + authToken};
         }

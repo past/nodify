@@ -26,6 +26,20 @@
     <link type="text/css" href="css/ui-lightness/jquery-ui-1.8.4.custom.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="css/BespinEmbedded.css">
 
+    <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script>!window.jQuery && document.write('<script src="js/jquery-1.4.2.min.js"><\/script>')</script>
+
+
+    <script src="js/jquery-ui-1.8.4.custom.min.js"></script>
+    <script src="js/jquery.loading.min.js"></script>
+    <script src="js/jquery.slidingmessage.min.js"></script>
+    <script src="BespinEmbedded.js"></script>
+
+    <script src="js/plugins.js?v=1"></script>
+    <script src="js/client.js?v=1"></script>
+
+
     <style type="text/css">
         .bespin {
             width: 98.5%;
@@ -66,6 +80,56 @@
         a.prj-lnk {
             color: white;
         }
+
+        .loading {
+            background: #FFC129;
+            color: black;
+            font-weight: bold;
+            padding: 3px;
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+        }
+
+        .loading-img, .loading-element {
+            background: transparent;
+            padding: 0px;
+        }
+
+        .loading.top {
+            -moz-border-radius-topleft: 0px;
+            -moz-border-radius-topright: 0px;
+            -webkit-border-top-left-radius: 0px;
+            -webkit-border-top-right-radius: 0px;
+        }
+
+        .loading.left {
+            -moz-border-radius-topleft: 0px;
+            -moz-border-radius-bottomleft: 0px;
+            -webkit-border-top-left-radius: 0px;
+            -webkit-border-bottom-left-radius: 0px;
+        }
+
+        .loading.bottom {
+            -moz-border-radius-bottomleft: 0px;
+            -moz-border-radius-bottomright: 0px;
+            -webkit-border-bottom-left-radius: 0px;
+            -webkit-border-bottom-right-radius: 0px;
+        }
+
+        .loading.right {
+            -moz-border-radius-topright: 0px;
+            -moz-border-radius-bottomright: 0px;
+            -webkit-border-top-right-radius: 0px;
+            -webkit-border-bottom-right-radius: 0px;
+        }
+
+        .loading-masked { overflow: hidden; }
+
+        .loading-error {
+            color: #FFF;
+            background: red;
+        }
+
     </style>
 
     <style type="text/css">
@@ -108,7 +172,7 @@
 <h1 style="font-size:2.8em; font-family: MuseoSans, Helvetica; color:white">Nodify</h1>
 
 <div style="text-align:right; color:white; font-size:14px;">
-    <label>Projects
+    <label>Project
     <select name="projects" id="projects" style="font-size:14px;">
       <option value="value">label</option>
       <option value="value">label</option>
@@ -153,20 +217,6 @@
 </div>
 
     <!-- Javascript at the bottom for fast page loading -->
-
-    <!-- Grab Google CDN's jQuery. fall back to local if necessary -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-    <script>!window.jQuery && document.write('<script src="js/jquery-1.4.2.min.js"><\/script>')</script>
-
-
-    <script src="js/jquery-ui-1.8.4.custom.min.js"></script>
-    <script src="js/jquery.loading.min.js"></script>
-    <script src="js/jquery.slidingmessage.min.js"></script>
-    <script src="BespinEmbedded.js"></script>
-
-    <script src="js/plugins.js?v=1"></script>
-    <script src="js/client.js?v=1"></script>
-
 
     <!--[if lt IE 7 ]>
       <script src="js/dd_belatedpng.js?v=1"></script>
