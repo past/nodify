@@ -23,3 +23,11 @@ installed locally using npm. Until it appears in the npm registry, you can clone
 the repository with git and do "npm link" inside the root directory. The command
 "nodify" can then be used to launch the IDE.
 
+Debugging
+---------
+
+In order to debug your node programs you need to use Google Chrome. This is a
+requirement from node-inspector that provides the debugging functionality.
+Also, for a better user experience you should enable popups from 127.0.0.1 in
+the browser's preferences.
+

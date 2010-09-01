@@ -291,9 +291,8 @@ var router = exports.router = function (app) {
             		console.log("Spawned proccess " + pid);
 			        user.projects[project].pid = pid;
 			        users.save(user.id, user, function (err) {
-	                    if (err) {
-	                        throw err;
-	                    }
+	                    if (err) throw err;
+						sendResult(res);
 					});
 			    }, function(stdout, stderr) {
 				    sendResult(res, stdout+'\n'+stderr);
