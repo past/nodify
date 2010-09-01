@@ -218,7 +218,7 @@ var router = exports.router = function (app) {
 	                    if (err) {
 	                        throw err;
 	                    }
-			    });
+					});
 			    }, function(stdout, stderr) {
 				    sendResult(res, stdout+'\n'+stderr);
 			    });
@@ -256,6 +256,48 @@ var router = exports.router = function (app) {
 	            if (user.projects[project].pid)
 			        deployer.stop(user.projects[project].pid);
 				sendResult(res);
+		    });
+		}
+	});
+
+	app.post('/debug', function(req, res, next) {
+		var authToken = req.cookies['_auth_nodify'];
+		if (!authToken)
+		    sendError(res, 403);
+		else {
+		    users.get(authToken, function(err, doc, meta) {
+		        var user;
+		        if (err && err.errno == 2) {
+		            sendError(res, 404);
+		            return;
+		        }
+		        else if (err) {
+		            sendError(res, 500);
+		            throw err;
+		        }
+	            user = createUser(doc);
+	            req.body = req.body || {};
+	            var project = req.body.project;
+	            if (!project) {
+			        console.log("ERROR: project=" + project);
+	                sendError(res, 400);
+	                return;
+	            }
+	            if (!user.projects[project] || !user.projects[project].handlers["GET /"]) {
+	                sendError(res, 404);
+	                return;
+	            }
+			    deployer.debug(user.projects[project], function (pid) {
+            		console.log("Spawned proccess " + pid);
+			        user.projects[project].pid = pid;
+			        users.save(user.id, user, function (err) {
+	                    if (err) {
+	                        throw err;
+	                    }
+					});
+			    }, function(stdout, stderr) {
+				    sendResult(res, stdout+'\n'+stderr);
+			    });
 		    });
 		}
 	});

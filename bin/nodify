@@ -3,7 +3,7 @@
 var connect = require('connect'),
 	api = require('../api'),
     child_process = require('child_process'),
-	port = parseInt(process.env.PORT) || 8080;
+	port = parseInt(process.env.PORT) || 8000;
 
 var server = connect.createServer(
 	connect.logger(),
@@ -23,7 +23,7 @@ server.use("/api",
 	connect.router(api.router)
 );
 server.listen(port);
-console.log('Nodify server running at http://127.0.0.1:8080/');
+console.log('Nodify server running at http://127.0.0.1:' + port);
 
 process.addListener('uncaughtException', function (err) {
 	console.log(err.stack);
@@ -31,14 +31,14 @@ process.addListener('uncaughtException', function (err) {
 
 // Point the default browser to nodify.
 if (process.platform === 'darwin')
-    child_process.exec('open http://127.0.0.1:8080/', function (error, stdout, stderr) {
+    child_process.exec('open http://127.0.0.1:' + port, function (error, stdout, stderr) {
         if (error)
             console.log('Opening the default browser failed: ' + error + '\nYou will to have to do it yourself.');
     });
 else if (process.platform === 'linux2') {
-    child_process.exec('gnome-open http://127.0.0.1:8080/', function (error, stdout, stderr) {
+    child_process.exec('gnome-open http://127.0.0.1:' + port, function (error, stdout, stderr) {
         if (error)
-            child_process.exec('xdg-open http://127.0.0.1:8080/', function (error, stdout, stderr) {
+            child_process.exec('xdg-open http://127.0.0.1:' + port, function (error, stdout, stderr) {
                 if (error)
                     console.log('Opening the default browser failed: ' + error + '\nYou will to have to do it yourself.');
             });

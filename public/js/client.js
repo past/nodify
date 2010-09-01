@@ -321,6 +321,30 @@ $(document).ready(function() {
 		$("#console").val("");
 		return false;	// prevent default action
 	});
+
+    $('#lnk-debug').click(function() {
+		$.ajax({
+			url: '/api/debug',
+			type: 'POST',
+			data: {'project': $('#projects').val()},
+			success: function (data) {
+				// Get the DOM node with the Bespin instance inside
+				var edit = document.getElementById("editor1");
+				// Get the environment variable.
+				var env = edit.bespin;
+				// Get the editor.
+				if (env && env.editor)
+					var editor = env.editor;
+				nodifyMsg("Started debugging");
+				window.open('http://127.0.0.1:8080/');
+				editor.focus = true;
+			},
+			error: function(request, status, error) {
+				consoleAppend(error, "error");
+			},
+			dataType: 'text'
+		});
+    });
 });
 
 window.onBespinLoad = function() {

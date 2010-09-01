@@ -51,3 +51,40 @@ var stop = exports.stop = function (pid) {
 	}
 }
 
+var debug = exports.debug = function (project, createCallback, exitCallback) {
+	var tempFile = __dirname + '/tmp/' + Math.random() + '.js';
+	fs.writeFile(tempFile, project.lastHandler.code, function(err) {
+		if (err)
+		    throw err;
+		var aggrOut = '';
+		var aggrErr = '';
+		var node = child_process.spawn('node', ['node-inspector/bin/inspector.js', '--start='+tempFile]);
+		createCallback(node.pid);
+		node.stdout.on('data', function (data) {
+		    console.log('Stdout data: ' + data);
+		    aggrOut += data;
+		});
+		node.stderr.on('data', function (data) {
+		    console.log('Stdout data: ' + data);
+		    aggrErr += data;
+		});
+		node.on('exit', function (code) {
+		    clearTimeout(timeoutId);
+		    aggrOut += '\nExit code: ' + code;
+		    fs.unlink(tempFile, function (err) {
+		        if (err)
+					console.log("Unable to delete " + tempFile + ".");
+				exitCallback(aggrOut, aggrErr);
+		    });
+		});
+		var timeoutCallback = function (child) {
+		    if (child) {
+		        console.log("Killing process " + child.pid);
+		        child.kill('SIGKILL');
+		    }
+		};
+		var timeoutId = setTimeout(timeoutCallback, 300000, node)
+		return node.pid;
+	});
+}
+
