@@ -1,0 +1,3 @@
+[submodule "node-inspector"]
+	path = node-inspector
+	url = http://github.com/dannycoates/node-inspector.git
