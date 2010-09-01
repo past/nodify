@@ -316,6 +316,11 @@ $(document).ready(function() {
         $("#blurb").dialog('open');
 		return false;	// prevent default action
 	});
+
+	$("#console-clear").click(function() {
+		$("#console").val("");
+		return false;	// prevent default action
+	});
 });
 
 window.onBespinLoad = function() {
