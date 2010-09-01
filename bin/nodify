@@ -14,7 +14,7 @@ server.use("/",
     connect.conditionalGet(),
     connect.cache(),
     connect.gzip(),
-	connect.staticProvider(require('path').dirname('..') + '/public')
+	connect.staticProvider(require('path').dirname(__dirname + '..') + '/public')
 );
 // Serve the API responses.
 server.use("/api",
