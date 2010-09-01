@@ -209,7 +209,6 @@ button {  width: auto; overflow: visible; }
     border: 10px solid #ddd;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
-
 }
 
 .btns {
@@ -239,22 +238,6 @@ button {  width: auto; overflow: visible; }
 a.prj-lnk {
     color: white;
 }
-/*nodify page css*/
-body {
-    font: 62.5% "Trebuchet MS", sans-serif;
-    margin: 50px;
-}
-
-input.store-btn {
-    width: 70px;
-    display: inline;
-}
-
-form.store-form {
-    display: inline;
-}
-
-
 
 .loading {
     background: #FFC129;
@@ -303,6 +286,55 @@ form.store-form {
 .loading-error {
     color: #FFF;
     background: red;
+}
+/*nodify page css*/
+body {
+    font: 62.5% "Trebuchet MS", sans-serif;
+    margin: 50px;
+}
+
+input.store-btn {
+    width: 70px;
+    display: inline;
+}
+
+form.store-form {
+    display: inline;
+}
+
+#console {
+    display: none;
+    background-color: black;
+    font-size: 14px;
+    font-family:Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+    color: #0c0;
+    width: 98.5%;
+    height: 140px;
+    margin: 0;
+    margin-top: 10px;
+    padding: 0;
+    border: 0;
+    border: 10px solid #ddd;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+#console-label {
+    display: none;
+    margin: 0;
+    margin-top: 10px;
+    font-size: 18px;
+    color: white;
+}
+
+#blurb {
+    display: none;
+    font-size: 14px;
+}
+
+#subtitle {
+    font-size: 14px;
+    color: white;
 }
 
 /*
