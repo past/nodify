@@ -35,7 +35,7 @@ if (process.platform === 'darwin')
         if (error)
             console.log('Opening the default browser failed: ' + error + '\nYou will to have to do it yourself.');
     });
-else if (process.platform === 'linux2') {
+else if (process.platform === 'linux') {
     child_process.exec('gnome-open http://127.0.0.1:' + port, function (error, stdout, stderr) {
         if (error)
             child_process.exec('xdg-open http://127.0.0.1:' + port, function (error, stdout, stderr) {
