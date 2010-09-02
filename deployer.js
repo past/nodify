@@ -58,7 +58,7 @@ var debug = exports.debug = function (project, createCallback, exitCallback) {
 		    throw err;
 		var aggrOut = '';
 		var aggrErr = '';
-		var node = child_process.spawn('node', ['node-inspector/bin/inspector.js', '--start='+tempFile]);
+		var node = child_process.spawn('node', [__dirname + '/node-inspector/bin/inspector.js', '--start=' + tempFile]);
 		createCallback(node.pid);
 		node.stdout.on('data', function (data) {
 		    console.log('Stdout data: ' + data);
