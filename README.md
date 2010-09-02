@@ -18,10 +18,31 @@ you will create a new user account.
 Installing locally
 ------------------
 
-Besides being available in [nodifyjs.com](http://nodifyjs.com/), nodify can be
-installed locally using npm. Until it appears in the npm registry, you can clone
-the repository with git and do "npm link" inside the root directory. The command
-"nodify" can then be used to launch the IDE.
+You may install nodify either using git or npm.
+
+Using npm:
+
+npm install nodify
+
+The command "nodify" can then be used to launch the IDE.
+
+Using git requires to fetch the node-inspector repository as a submodule:
+
+git clone http://github.com/past/nodify.git
+cd nodify
+git submodule init
+git submodule update
+
+Then you can run nodify like this:
+
+node server.js
+
+Alternatively you may use npm to install a nodify script that launches the server
+from any path:
+
+npm install
+or
+npm link
 
 Debugging
 ---------
