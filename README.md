@@ -26,16 +26,17 @@ You may install nodify either using git or [npm](http://npmjs.org).
     $ npm install nodify
 
 The command "nodify" can then be used to launch the IDE.
+The only requirements are node and npm.
 
 ###Via git:
 
     $ git clone http://github.com/past/nodify.git
-    $ cd nodify
-    $ git submodule update --init
 
 Then you can run nodify like this:
 
     $ bin/nodify
+
+You must have already downladed and installed node, connect, nStore and node-inspector.
 
 Debugging
 ---------
@@ -43,7 +44,8 @@ Debugging
 In order to debug your node programs you need to use Google Chrome. This is a
 requirement from node-inspector that provides the debugging functionality.
 Also, for a better user experience you should enable popups from 127.0.0.1 in
-the browser's preferences.
+the browser's preferences. Furthermore, node itself must be compiled with the
+--debug configuration option.
 
 License
 -------
