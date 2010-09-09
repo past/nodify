@@ -211,9 +211,11 @@ var router = exports.router = function (app) {
 	                sendError(res, 404);
 	                return;
 	            }
-			    deployer.start(user.projects[project], function (pid) {
-            		console.log("Spawned proccess " + pid);
-			        user.projects[project].pid = pid;
+			    deployer.start(user.projects[project], function (pids) {
+					pids.forEach(function(pid) {
+						console.log("Spawned proccess " + pid);
+					});
+			        user.projects[project].pids = pids;
 			        users.save(user.id, user, function (err) {
 	                    if (err) {
 	                        throw err;
@@ -253,8 +255,8 @@ var router = exports.router = function (app) {
 	                sendError(res, 404);
 	                return;
 	            }
-	            if (user.projects[project].pid)
-			        deployer.stop(user.projects[project].pid);
+	            if (user.projects[project].pids)
+			        deployer.stop(user.projects[project].pids);
 				sendResult(res);
 		    });
 		}
@@ -287,9 +289,11 @@ var router = exports.router = function (app) {
 	                sendError(res, 404);
 	                return;
 	            }
-			    deployer.debug(user.projects[project], function (pid) {
-            		console.log("Spawned proccess " + pid);
-			        user.projects[project].pid = pid;
+			    deployer.debug(user.projects[project], function (pids) {
+					pids.forEach(function(pid) {
+						console.log("Spawned proccess " + pid);
+					});
+			        user.projects[project].pids = pids;
 			        users.save(user.id, user, function (err) {
 	                    if (err) throw err;
 						sendResult(res);
@@ -341,7 +345,7 @@ var createUser = function(dbUser) {
 var createProject = function(dbProject) {
     var lastH = dbProject.lastHandler;
     var proj = new Project(dbProject.name, dbProject.author);
-    proj.pid = dbProject.pid;
+    proj.pids = dbProject.pids;
     for (var h in dbProject.handlers) {
         proj.addHandler(createHandler(dbProject.handlers[h]));
     }
