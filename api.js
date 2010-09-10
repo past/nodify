@@ -255,9 +255,14 @@ var router = exports.router = function (app) {
 	                sendError(res, 404);
 	                return;
 	            }
-	            if (user.projects[project].pids)
+	            if (user.projects[project].pids) {
 			        deployer.stop(user.projects[project].pids);
-				sendResult(res);
+					delete user.projects[project].pids;
+					users.save(user.id, user, function (err) {
+						if (err) throw err;
+						sendResult(res);
+					});
+				}
 		    });
 		}
 	});

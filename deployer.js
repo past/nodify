@@ -47,35 +47,35 @@ var debug = exports.debug = function (project, createCallback, exitCallback) {
 		if (err) throw err;
 		var aggrOut = '';
 		var aggrErr = '';
-		var node = child_process.spawn('node_g', ['--debug=7878', tempFile]);
-		node.stdout.on('data', function (data) {
+		var inspector = child_process.spawn('node-inspector');
+		inspector.stdout.on('data', function (data) {
 		    console.log('Stdout data: ' + data);
 		    aggrOut += data;
-			var inspector = child_process.spawn('node-inspector', ['--debug-port=7878', '--web-port=8080']);
+			var node = child_process.spawn('node', ['--debug', tempFile]);
 			createCallback([node.pid, inspector.pid]);
-			inspector.stdout.on('data', function (data) {
+			node.stdout.on('data', function (data) {
 				console.log('Stdout data: ' + data);
 				aggrOut += data;
 			});
-			inspector.stderr.on('data', function (data) {
+			node.stderr.on('data', function (data) {
 				console.log('Stderr data: ' + data);
 				aggrErr += data;
 			});
-			inspector.on('exit', function (code) {
+			node.on('exit', function (code) {
 				aggrOut += '\nExit code: ' + code;
+				fs.unlink(tempFile, function (err) {
+					if (err)
+						console.log("Unable to delete " + tempFile + ".");
+				});
 				exitCallback(aggrOut, aggrErr);
 			});
 		});
-		node.stderr.on('data', function (data) {
+		inspector.stderr.on('data', function (data) {
 			console.log('Stderr data: ' + data);
 			aggrErr += data;
 		});
-		node.on('exit', function (code) {
+		inspector.on('exit', function (code) {
 			aggrOut += '\nExit code: ' + code;
-			fs.unlink(tempFile, function (err) {
-				if (err)
-					console.log("Unable to delete " + tempFile + ".");
-			});
 		});
 	});
 }

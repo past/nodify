@@ -1,6 +1,6 @@
 {
     "name": "nodify",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "description": "A web-based IDE for NodeJS applications",
     "homepage": "http://nodifyjs.com",
     "author": "Panagiotis Astithas <pastith@gmail.com>",
@@ -14,7 +14,7 @@
     "bin" : { "nodify" : "./bin/nodify" },
     "dependencies": {
         "connect": ">= 0.2.4",
-        "node-inspector": ">= 0.0.1",
+        "node-inspector": ">= 0.0.2",
         "nStore": ">= 0.2.1"
     }
 }
