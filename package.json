@@ -10,8 +10,12 @@
         { "name": "Dionysios Synodinos", "email": "synodinos@gmail.com" }
     ],
     "keywords": ["ide", "programming", "editor"],
-    "engines" : { "node": ">= 0.2.0" },
-    "bin" : { "nodify" : "./bin/nodify" },
+    "engines": { "node": ">= 0.2.0" },
+    "bin": { "nodify" : "./bin/nodify" },
+    "repository": {
+        "type": "git",
+        "url": "http://github.com/past/nodify.git"
+    },
     "dependencies": {
         "connect": ">= 0.2.4",
         "node-inspector": ">= 0.0.2",
