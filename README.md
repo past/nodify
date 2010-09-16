@@ -47,6 +47,11 @@ Also, for a better user experience you should enable popups from 127.0.0.1 in
 the browser's preferences. Furthermore, node itself must be compiled with the
 --debug configuration option.
 
+Mailing list
+------------
+
+For any questions, suggestions or general brainstorming, use the [discussion group](http://groups.google.com/group/nodify).
+
 License
 -------
 
