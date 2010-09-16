@@ -16,6 +16,13 @@
         "type": "git",
         "url": "http://github.com/past/nodify.git"
     },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://github.com/past/nodify/raw/master/LICENSE"
+        }
+    ],
+
     "dependencies": {
         "connect": ">= 0.2.4",
         "node-inspector": ">= 0.0.2",
