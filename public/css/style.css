@@ -235,10 +235,6 @@ button {  width: auto; overflow: visible; }
 
 }
 
-a.prj-lnk {
-    color: white;
-}
-
 .loading {
     background: #FFC129;
     color: black;
@@ -291,6 +287,7 @@ a.prj-lnk {
 body {
     font: 62.5% "Trebuchet MS", sans-serif;
     margin: 50px;
+    background-color:#1E1916;
 }
 
 input.store-btn {
@@ -300,6 +297,10 @@ input.store-btn {
 
 form.store-form {
     display: inline;
+}
+
+a#more, a#console-clear {
+    color: #ffffff;
 }
 
 #console {
@@ -325,6 +326,36 @@ form.store-form {
     margin-top: 10px;
     font-size: 18px;
     color: white;
+}
+
+#div-lnk-new, #div-lnk-rn, #div-lnk-del, #div-lnk-start, #div-lnk-debug, #div-lnk-stop {
+    display:inline;
+    border-right-width: .2em;
+    border-right-style: solid;
+    border-right-color: #4C4A41;
+    padding-left:14px;
+    padding-right:14px;
+    padding-top:5px;
+}
+
+a#lnk-new, a#lnk-rn, a#lnk-del, a#lnk-start, a#lnk-debug, a#lnk-stop {
+    color: #ffffff;
+}
+
+#div-lnk-new {
+    margin-left:55px;
+}
+
+img#btn-forum, img#btn-twitter {
+    top: 10px; border: 0px;
+}
+
+img#btn-twitter {
+    right: 131px;
+}
+
+img#btn-forum {
+    right: 257px;
 }
 
 #blurb {

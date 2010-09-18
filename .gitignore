@@ -2,3 +2,4 @@
 *.swp
 public/.idea
 tmp/*.js
+.idea
